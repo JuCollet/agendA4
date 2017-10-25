@@ -1,0 +1,52 @@
+{
+  "name": "agenda4",
+  "version": "1.0.0",
+  "description": "Print your Google Agenda with style.",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run clean && webpack --progress",
+    "clean": "rimraf public",
+    "test": "mocha -w test/helpers/browser.js src/*/*.test.js",
+    "dev:hot": "webpack-dev-server --hot --inline --progress --colors --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JuCollet/agendA4.git"
+  },
+  "author": "Julien C.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JuCollet/agendA4/issues"
+  },
+  "homepage": "https://github.com/JuCollet/agendA4#readme",
+  "dependencies": {
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.6",
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "chai": "^4.1.2",
+    "css-loader": "^0.28.7",
+    "enzyme": "^3.1.0",
+    "enzyme-adapter-react-16": "^1.0.2",
+    "extract-text-webpack-plugin": "^2.0.0-beta.4",
+    "html-webpack-plugin": "^2.30.1",
+    "jsdom": "~9.0.0",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
+    "mocha": "^4.0.1",
+    "path": "^0.12.7",
+    "postcss-loader": "^2.0.8",
+    "react-addons-test-utils": "^0.14.8",
+    "rimraf": "^2.6.2",
+    "style-loader": "^0.19.0",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.3"
+  }
+}
