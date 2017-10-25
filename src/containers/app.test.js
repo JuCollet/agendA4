@@ -5,19 +5,15 @@ import {expect} from 'chai';
 import App from "./app";
 
 describe('<App/>', function () {
-  
-  
-  const wrapper = shallow(<App/>);
-  
-  
-  it('Exists', function () {
-    expect(wrapper.find('.App').exists()).to.equal(true);
-  });
-  
-  describe('Second line', function(){
-    it('Should be displayed', function(){
-      expect(wrapper.first().hasClass('App')).to.equal(true);
-    })
+
+  const wrapper = mount(<App/>);
+
+  it('contains a <Preview/>', function(){
+    expect(wrapper.find('.Preview')).to.have.length(1);
+  })
+
+  it('contains a <ControlBox/>', function(){
+    expect(wrapper.find('.ControlBox')).to.have.length(1);
   })
 
 });
