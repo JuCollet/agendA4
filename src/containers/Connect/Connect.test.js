@@ -6,7 +6,7 @@ import Connect from "./Connect";
 
 describe('<Connect/>', function(){
   const wrapper = shallow(<Connect/>);
-  it('has class "Connect"', function(){
+  it('should have a class "Connect"', function(){
     expect(wrapper.first().hasClass('Connect')).to.equal(true);
   })
 })

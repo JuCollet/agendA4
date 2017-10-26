@@ -6,7 +6,7 @@ import Button from "./Button";
 
 describe('<Button/>', function(){
   const wrapper = shallow(<Button/>);
-  it('has class "Button"', function(){
+  it('should have a class "Button"', function(){
     expect(wrapper.first().hasClass('Button')).to.equal(true);
   })
 })

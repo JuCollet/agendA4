@@ -6,7 +6,7 @@ import Calendar from "./Calendar";
 
 describe('<Calendar/>', function(){
   const wrapper = shallow(<Calendar/>);
-  it('has class "Calendar"', function(){
+  it('should have a class "Calendar"', function(){
     expect(wrapper.first().hasClass('Calendar')).to.equal(true);
   })
 })

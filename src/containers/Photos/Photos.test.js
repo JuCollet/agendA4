@@ -6,7 +6,7 @@ import Photos from "./Photos";
 
 describe('<Photos/>', function(){
   const wrapper = shallow(<Photos/>);
-  it('has class "Photos"', function(){
+  it('should have a class "Photos"', function(){
     expect(wrapper.first().hasClass('Photos')).to.equal(true);
-  })
-})
+  });
+});

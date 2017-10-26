@@ -6,7 +6,7 @@ import Select from "./Select";
 
 describe('<Select/>', function(){
   const wrapper = shallow(<Select/>);
-  it('has class "Select"', function(){
+  it('should have a class "Select"', function(){
     expect(wrapper.first().hasClass('Select')).to.equal(true);
   })
 })
