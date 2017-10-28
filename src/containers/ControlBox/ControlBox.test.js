@@ -5,7 +5,7 @@ import { expect } from "chai";
 import ControlBox from "./ControlBox";
 import Calendar from "../../components/Calendar/Calendar";
 
-const setup = (customProps, customState) => {
+const setup = (customProps) => {
   
   const props = Object.assign({
     ...customProps

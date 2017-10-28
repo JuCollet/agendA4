@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Button from "../../components/Button/Button";
 
+let googleApi;
 const CLIENT_ID = '28576487880-usdrjfiq5c4e9t7992quhgs0vtcfgops.apps.googleusercontent.com';
 const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
 const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
@@ -16,6 +17,7 @@ export default class Connect extends Component {
       isSignedIn : false
     };
     this.fetchCal = this.fetchCal.bind(this);
+    this.fetchCalendarsList = this.fetchCalendarsList.bind(this);
     this.gapiInit = this.gapiInit.bind(this);
     this.handleAuthClick = this.handleAuthClick.bind(this);
     this.updateSigninStatus = this.updateSigninStatus.bind(this);
@@ -32,10 +34,12 @@ export default class Connect extends Component {
         discoveryDocs: DISCOVERY_DOCS,
         clientId: CLIENT_ID,
         scope: SCOPES
-        }).then(function () {
+        }).then(() => {
+          googleApi = gapi;
           gapi.auth2.getAuthInstance().isSignedIn.listen(this.updateSigninStatus);
           this.updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-        }.bind(this));
+          this.fetchCalendarsList();
+        });
       });
     };
     
@@ -45,6 +49,10 @@ export default class Connect extends Component {
   
   componentDidMount(){
     this.gapiInit();
+  }
+  
+  componentWillReceiveProps(nextProps){
+    this.fetchCal("qfqo52u5oannurigm88qc0ea98@group.calendar.google.com","2017-09-30T22:00:00.000Z","2017-10-31T23:00:00.000Z");
   }
   
   updateSigninStatus(isSignedIn) {
@@ -62,36 +70,40 @@ export default class Connect extends Component {
     }
   }  
   
-  fetchCal(){
-    gapi.client.calendar.events.list({
-      'calendarId': "#contacts@group.v.calendar.google.com",
-      'timeMin': (new Date()).toISOString(),
-      'showDeleted': false,
-      'singleEvents': true,
-      'maxResults': 10,
-      'orderBy': 'startTime'
-    }).then(function(response) {
-      var events = response.result.items;
-      console.log(events)
-    });
+  fetchCal(calId, timeMin, timeMax){
+    if(googleApi) {
+      googleApi.client.calendar.events.list({
+        'calendarId': calId,
+        'timeMin': timeMin,
+        'timeMax': timeMax,
+        'showDeleted': false,
+        'singleEvents': true,
+        'maxResults': 10,
+        'orderBy': 'startTime'
+      }).then(function(response) {
+        var events = response.result.items;
+        console.log(events);
+      });
+    }
   }
 
-  fetchCals(){
-    gapi.client.calendar.calendarList.list()
-      .then(function(response) {
-      var events = response.result.items;
-      console.log(events)
-    });
+  fetchCalendarsList(){
+    if(googleApi) {
+      googleApi.client.calendar.calendarList.list()
+        .then(response => {
+        var events = response.result.items;
+        this.props.updateCalendarList(events);
+      });
+    }
   }  
   
   render(){
     
-    const title = this.state.isSignedIn ? "Sign out" : "Sign in";
+    const title = this.state.isSignedIn ? "Se déconnecter" : "Se connecter";
     
     return (
       <div className="Connect">
         <Button clickHandler={this.handleAuthClick} title={title}/>
-        {this.state.isSignedIn ? <div><Button clickHandler={this.fetchCal} title="Fetch"/> <Button clickHandler={this.fetchCals} title="Fetch cals"/> </div>: null}
       </div>
     );
   }

@@ -1,10 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default function(){
+export default function(props){
   return (
     <div className="Select">
-      <h1>Select</h1>
+      <select onChange={e=>props.selectOnChangeHandler(e)}> 
+        {props.selectOptions.map(el=>{
+          return <option key={el} value={el}>{el}</option>;
+        })}
+      </select>
     </div>
-  )
+  );
 }

@@ -8,8 +8,8 @@ describe('<App/>', function () {
 
   const wrapper = shallow(<App/>);
 
-  it('has class"App"', function(){
+  it('should have a class"App"', function(){
     expect(wrapper.first().hasClass('App')).to.equal(true);
-  })
+  });
 
 });

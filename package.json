@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run clean && webpack --progress",
     "clean": "rimraf public",
-    "test": "mocha -w test/helpers/browser.js 'src/**/*.test.js'",
+    "test": "mocha -w test/helpers/browser.js 'src/**/*.test.js' --require ignore-styles",
     "dev:hot": "webpack-dev-server --hot --inline --progress --colors --watch"
   },
   "repository": {
@@ -21,7 +21,7 @@
   "homepage": "https://github.com/JuCollet/agendA4#readme",
   "dependencies": {
     "gapi-client": "0.0.3",
-    "google-client-api": "^1.0.4",
+    "lodash": "^4.17.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0"
   },
@@ -39,6 +39,7 @@
     "enzyme-adapter-react-16": "^1.0.2",
     "extract-text-webpack-plugin": "^2.0.0-beta.4",
     "html-webpack-plugin": "^2.30.1",
+    "ignore-styles": "^5.0.1",
     "jsdom": "~9.0.0",
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
@@ -48,6 +49,7 @@
     "prop-types": "^15.6.0",
     "react-addons-test-utils": "^0.14.8",
     "rimraf": "^2.6.2",
+    "sinon": "^4.0.2",
     "style-loader": "^0.19.0",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.3"
