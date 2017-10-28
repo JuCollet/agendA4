@@ -1,8 +1,8 @@
 /*global gapi*/
 
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import Button from "../../components/Button/Button";
+import _ from "lodash";
 
 let googleApi;
 const CLIENT_ID = '28576487880-usdrjfiq5c4e9t7992quhgs0vtcfgops.apps.googleusercontent.com';
@@ -14,7 +14,8 @@ export default class Connect extends Component {
   constructor(props){
     super(props);
     this.state = {
-      isSignedIn : false
+      isSignedIn : false,
+      fetchedData : {},
     };
     this.fetchCal = this.fetchCal.bind(this);
     this.fetchCalendarsList = this.fetchCalendarsList.bind(this);
@@ -38,7 +39,6 @@ export default class Connect extends Component {
           googleApi = gapi;
           gapi.auth2.getAuthInstance().isSignedIn.listen(this.updateSigninStatus);
           this.updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-          this.fetchCalendarsList();
         });
       });
     };
@@ -52,19 +52,46 @@ export default class Connect extends Component {
   }
   
   componentWillReceiveProps(nextProps){
-    this.fetchCal("qfqo52u5oannurigm88qc0ea98@group.calendar.google.com","2017-09-30T22:00:00.000Z","2017-10-31T23:00:00.000Z");
+    // Si nouvelle date, effacer les données dans fetchedData
+    if(nextProps.selectedMonth !== this.props.selectedMonth){
+      this.setState({
+        fetchedData : {}
+      });
+    }
+    // Ne garder que les objets dont la clé se trouvent dans dans les nouvelles props
+    if(nextProps.selectedCalendars !== this.props.selectedCalendars){
+      this.setState({
+        fetchedData : _.pick(this.state.fetchedData, nextProps.selectedCalendars)
+      });
+    }
+    
+    if(
+      this.state.isSignedIn &&
+      googleApi &&
+      nextProps.selectedCalendars.length > 0 &&
+      nextProps.selectedMonth &&
+      nextProps.selectedCalendars !== this.props.selectedCalendars ||
+      nextProps.selectedMonth !== this.props.selectedMonth
+      ){
+        for(let i=0; i < nextProps.selectedCalendars.length; i++){
+          this.fetchCal(nextProps.selectedCalendars[i],nextProps.selectedMonth.timeMin,nextProps.selectedMonth.timeMax);
+        }
+      }
   }
   
-  updateSigninStatus(isSignedIn) {
+  updateSigninStatus(isSignedIn, callback) {
     this.setState({
       isSignedIn : isSignedIn
     });
     this.props.userIsAuthorizedUpdate(isSignedIn);
+    if(isSignedIn){
+      this.fetchCalendarsList();
+    }
   }
   
   handleAuthClick() {
     if(this.state.isSignedIn){
-      gapi.auth2.getAuthInstance().signOut();
+      gapi.auth2.getAuthInstance().disconnect();
     } else {
       gapi.auth2.getAuthInstance().signIn();
     }
@@ -80,9 +107,14 @@ export default class Connect extends Component {
         'singleEvents': true,
         'maxResults': 10,
         'orderBy': 'startTime'
-      }).then(function(response) {
+      }).then(response => {
         var events = response.result.items;
-        console.log(events);
+        this.setState({
+          fetchedData : {
+            [calId] : events,
+            ...this.state.fetchedData
+          }
+        });
       });
     }
   }

@@ -28,13 +28,13 @@ describe('<ControlBox/>', function(){
     expect(wrapper.first().hasClass('ControlBox')).to.equal(true);
   });
   
-  it('should contain a Calendar if authorized', () => {
+  it('should contain a Calendar if signed in', () => {
     const { wrapper } = setup();
     wrapper.setState({userIsAuthorized:true});
     expect(wrapper.find(Calendar)).to.have.length(1);
   });
   
-  it('should not contain a Calendar if uauthorized', () => {
+  it('should not contain a Calendar if not signed in', () => {
     const { wrapper } = setup();
     wrapper.setState({userIsAuthorized:false});
     expect(wrapper.find(Calendar)).to.have.length(0);

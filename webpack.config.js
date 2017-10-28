@@ -6,7 +6,7 @@ const htmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = {
     entry : {
         bundle : './src/index.js',
-        vendor : ['react', 'react-dom']
+        vendor : ['react', 'lodash']
     },
     output : {
         filename : '[name].[chunkhash].js',

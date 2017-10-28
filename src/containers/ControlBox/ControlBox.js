@@ -16,7 +16,7 @@ export default class ControlBox extends Component {
       calendarList : [],
       monthsList : this.createMonthsList(),
       selectedCalendars : [],
-      selectedMonth : {}
+      selectedMonth : this.createMonthsList()[0]
     };
     this.createMonthsList = this.createMonthsList.bind(this);
     this.renderComponents = this.renderComponents.bind(this);
@@ -24,12 +24,6 @@ export default class ControlBox extends Component {
     this.updateSelectedCalendars = this.updateSelectedCalendars.bind(this);
     this.updateSelectedMonth = this.updateSelectedMonth.bind(this);
     this.userIsAuthorizedUpdate = this.userIsAuthorizedUpdate.bind(this);
-  }
-  
-  componentDidMount(){
-    this.setState({
-      selectedMonth : this.state.monthsList[new Date().getMonth()]
-    });
   }
   
   createMonthsList(){
