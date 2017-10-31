@@ -58,7 +58,7 @@ module.exports = {
             names: ['vendor', 'manifest']
         }),
         new htmlWebpackPlugin({
-            title: 'React Redux Boilerplate',
+            title: 'AgendA4 - Print your Google Agenda with style.',
             template: 'src/index.ejs',
             files : {
                 css : ['styles/styles.css', ]

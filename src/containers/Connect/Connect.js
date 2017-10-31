@@ -16,11 +16,13 @@ export default class Connect extends Component {
     this.state = {
       isSignedIn : false,
       fetchedData : {},
+      sortedData : {}
     };
     this.fetchCal = this.fetchCal.bind(this);
     this.fetchCalendarsList = this.fetchCalendarsList.bind(this);
     this.gapiInit = this.gapiInit.bind(this);
     this.handleAuthClick = this.handleAuthClick.bind(this);
+    this.sortData = this.sortData.bind(this);
     this.updateSigninStatus = this.updateSigninStatus.bind(this);
   }
   
@@ -42,9 +44,31 @@ export default class Connect extends Component {
         });
       });
     };
-    
     document.body.appendChild(script);
-    
+  }
+  
+  sortData(){
+    let sortedData = {};
+    _.forEach(this.state.fetchedData, (value, key) => {
+      _.forEach(value, (value, key) => {
+        if(value.start.date || value.start.dateTime){
+          const fullDayDate = value.start.date ? true : false;
+          const startDate = fullDayDate ? new Date(value.start.date) : new Date(value.start.dateTime);
+          if(!sortedData[startDate.getDate()+this.props.selectedMonth.firstDay]){
+            sortedData[startDate.getDate()+this.props.selectedMonth.firstDay] = [];
+          }
+          sortedData[startDate.getDate()+this.props.selectedMonth.firstDay].push({
+            eventText : value.summary,
+            startTime : !fullDayDate ? `${startDate.getHours()}:${startDate.getMinutes() < 10 ? "0"+startDate.getMinutes() : startDate.getMinutes()}` : null
+          });
+        } else {
+          return;
+        }
+      });
+    });
+    this.setState({
+      sortedData
+    }, ()=>console.log(this.state.sortedData));
   }
   
   componentDidMount(){
@@ -52,12 +76,15 @@ export default class Connect extends Component {
   }
   
   componentWillReceiveProps(nextProps){
+    
     // Si nouvelle date, effacer les données dans fetchedData
     if(nextProps.selectedMonth !== this.props.selectedMonth){
       this.setState({
-        fetchedData : {}
+        fetchedData : {},
+        sortData : {}
       });
     }
+
     // Ne garder que les objets dont la clé se trouvent dans dans les nouvelles props
     if(nextProps.selectedCalendars !== this.props.selectedCalendars){
       this.setState({
@@ -114,7 +141,7 @@ export default class Connect extends Component {
             [calId] : events,
             ...this.state.fetchedData
           }
-        });
+        }, ()=>this.sortData());
       });
     }
   }

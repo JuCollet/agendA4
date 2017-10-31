@@ -3,6 +3,13 @@ import { mount, shallow} from 'enzyme';
 import { expect } from "chai";
 import sinon from "sinon";
 
+import { 
+  selectedMonthMock, 
+  selectedCalendarsMock, 
+  fetchedDataMock, 
+  sortedDataMock} 
+  from "./ControlBox.mock";
+
 import Connect from "./Connect";
 
 const setup = function(customProps){

@@ -9,7 +9,7 @@ describe('<Preview/>', function(){
   it('should have a class "Preview"', function(){
     expect(wrapper.first().hasClass('Preview')).to.equal(true);
   });
-  it('should contain a canvas element', function(){
+  it('should contain an iframe element', function(){
     expect(wrapper.find('canvas')).to.have.length(1);
   }); 
 });

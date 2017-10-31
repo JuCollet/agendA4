@@ -1,10 +1,19 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { Component } from "react";
 
-export default function(){
-  return (
-    <div className="Preview">
-      <canvas height="594" width="420"></canvas>
-    </div>
-  );
+export default class Preview extends Component{
+  
+  constructor(props){
+    super(props);
+    this.state = {
+      pdf : ''
+    };
+  }
+  
+  render(){
+    return (
+      <div className="Preview">
+        <canvas width="420" height="598"></canvas>
+      </div>
+    );    
+  }
 }

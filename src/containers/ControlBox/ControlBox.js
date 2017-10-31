@@ -43,12 +43,13 @@ export default class ControlBox extends Component {
       months.push({
         string : `${monthsNames[i]} ${year}`,
         timeMin : new Date(isoYear,month).toISOString(),
-        timeMax : new Date(isoYear,month + 1).toISOString()
+        timeMax : new Date(isoYear,month + 1).toISOString(),
+        firstDay : new Date(isoYear, month, 1).getDay() === 0 ? new Date(isoYear, month, 1).getDay() + 6 : new Date(isoYear, month, 1).getDay() -1
       });
     }
     return months;
   }
-  
+
   userIsAuthorizedUpdate(isAuthorized){
     this.setState({
       userIsAuthorized : isAuthorized
