@@ -7,17 +7,18 @@ import {
   selectedMonthMock, 
   selectedCalendarsMock, 
   fetchedDataMock, 
-  sortedDataMock} 
-  from "./ControlBox.mock";
+  sortedDataMock
+  } from "./Connect.mock.js";
 
 import Connect from "./Connect";
 
 const setup = function(customProps){
   
   const props = {
+    updateFetchedData : ()=>null,
     ...customProps
   };
-  
+
   const wrapper = shallow(<Connect {...props} />);
   
   return {
@@ -34,43 +35,49 @@ describe('<Connect/>', function(){
     expect(wrapper.first().hasClass('Connect')).to.equal(true);
   });
   
-  it('should drop a calendar data in dataFetched if user deselect calendar', () => {
-    const { wrapper } = setup();
-    const startState = { fetchedData : { cal1: [1,2], cal2: [2,3] }};
-    wrapper.setProps({selectedCalendars : 'cal1' });
-    wrapper.setState(startState);
-    expect(wrapper.state('fetchedData')).to.eql(startState.fetchedData);
-    wrapper.setProps({selectedCalendars : 'cal3'});
-    expect(wrapper.state('fetchedData')).to.not.eql(startState.fetchedData);
-  });
-  
-  it('should reset the dataFetched if user change date', () => {
-    const { wrapper } = setup({selectedCalendars : []});
-    const startState = { fetchedData : { cal1: [1,2], cal2: [2,3] }};
-    wrapper.setProps({selectedMonth : ['1'] });
-    wrapper.setState(startState);
-    expect(wrapper.state('fetchedData')).to.eql(startState.fetchedData);
-    wrapper.setProps({selectedMonth : ['2'] });
-    expect(wrapper.state('fetchedData')).to.not.eql(startState.fetchedData);
-  });  
-  
-  describe('fetch', ()=>{
+  describe('ComponentwillReceiveNewProps()', ()=>{
+
     const fetchMock = sinon.spy(Connect.prototype, 'fetchCal');
-    const wrapper = mount(<Connect/>);
+    const wrapper = mount(<Connect selectedCalendars={['calB']} />);
     
-    it('should refetch data when receive new props if user is signed in', ()=>{
+    it('should not fetch data if user is signed in but got no props', ()=>{
+      fetchMock.reset();
       wrapper.setState({isSignedIn : true});
-      wrapper.setProps({selectedCalendars:['calA'], selectedMonth:{timeMin:"foo"}});
+      expect(fetchMock.calledOnce).to.equal(false);
+    });
+    
+    it('should fetch data if user is signed in and receive new month', ()=>{
+      fetchMock.reset();
+      wrapper.setState({isSignedIn : true});
+      wrapper.setProps({selectedCalendars:['calB'], selectedMonth:{timeMin:"foo"}, googleApiMock:'ok'});
+      expect(fetchMock.calledOnce).to.equal(true);
+    });    
+    
+    it('should fetch data if user is signed in and receive new calendars', ()=>{
+      fetchMock.reset();
+      wrapper.setState({isSignedIn : true});
+      wrapper.setProps({selectedCalendars:['calA'], selectedMonth:{timeMin:"foo"}, googleApiMock:'ok'});
       expect(fetchMock.calledOnce).to.equal(true);
     });
     
-    it('should not refetch data when receive new props if user is not signed in', ()=>{
+    it('should not fetch data if user is not signed in', ()=>{
       fetchMock.reset();
       wrapper.setState({isSignedIn : false});
       wrapper.setProps({selectedCalendars:['calB']});
       expect(fetchMock.calledOnce).to.equal(false);
-    });  
+    });
     
   });
+  
+  describe('processData()', () => {
+    it('should set the correct output based on fetchedData state', () => {
+      const { wrapper } = setup();
+      wrapper.setProps({selectedMonth : selectedMonthMock, selectedCalendars : selectedCalendarsMock});
+      wrapper.instance().processData(fetchedDataMock);
+      expect(wrapper.state('processedData')).to.eql(sortedDataMock);
+    });
+  });
+  
+  
   
 });

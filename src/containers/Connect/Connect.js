@@ -2,7 +2,8 @@
 
 import React, { Component } from "react";
 import Button from "../../components/Button/Button";
-import _ from "lodash";
+
+import { colors } from "../../assets/colors";
 
 let googleApi;
 const CLIENT_ID = '28576487880-usdrjfiq5c4e9t7992quhgs0vtcfgops.apps.googleusercontent.com';
@@ -15,16 +16,60 @@ export default class Connect extends Component {
     super(props);
     this.state = {
       isSignedIn : false,
-      fetchedData : {},
-      sortedData : {}
+      processedData : {},
+      selectedCalendars : []
     };
     this.fetchCal = this.fetchCal.bind(this);
     this.fetchCalendarsList = this.fetchCalendarsList.bind(this);
     this.gapiInit = this.gapiInit.bind(this);
     this.handleAuthClick = this.handleAuthClick.bind(this);
-    this.sortData = this.sortData.bind(this);
+    this.processData = this.processData.bind(this);
     this.updateSigninStatus = this.updateSigninStatus.bind(this);
   }
+  
+  componentDidMount(){
+    this.gapiInit();
+  }
+  
+  componentWillReceiveProps(nextProps){
+    
+    if(nextProps.selectedMonth !== this.props.selectedMonth){
+      this.setState({
+        processedData : {}
+      }, () => { 
+        if(nextProps.selectedCalendars.length === 0){
+          return this.setState({
+            processedData : {}
+          }, ()=>this.props.updateFetchedData(this.state.processedData));
+        }        
+        for(let i=0; i < nextProps.selectedCalendars.length; i++){
+          this.fetchCal(nextProps.selectedCalendars[i],nextProps.selectedMonth.timeMin,nextProps.selectedMonth.timeMax);
+        }
+        return;
+      });
+    }
+    
+    if(
+      this.state.isSignedIn &&
+      (googleApi || nextProps.googleApiMock) &&
+      nextProps.selectedCalendars &&
+      nextProps.selectedMonth &&
+      nextProps.selectedCalendars.length !== this.props.selectedCalendars.length
+    ){
+      this.setState({
+        processedData : {}
+      }, () => {
+        if(nextProps.selectedCalendars.length === 0){
+          return this.setState({
+            processedData : {}
+          }, ()=>this.props.updateFetchedData(this.state.processedData));
+        }
+        for(let i=0; i < nextProps.selectedCalendars.length; i++){
+          this.fetchCal(nextProps.selectedCalendars[i],nextProps.selectedMonth.timeMin,nextProps.selectedMonth.timeMax);
+        }
+      });
+    }
+  }  
   
   gapiInit() {
     
@@ -47,63 +92,28 @@ export default class Connect extends Component {
     document.body.appendChild(script);
   }
   
-  sortData(){
-    let sortedData = {};
-    _.forEach(this.state.fetchedData, (value, key) => {
-      _.forEach(value, (value, key) => {
-        if(value.start.date || value.start.dateTime){
-          const fullDayDate = value.start.date ? true : false;
-          const startDate = fullDayDate ? new Date(value.start.date) : new Date(value.start.dateTime);
-          if(!sortedData[startDate.getDate()+this.props.selectedMonth.firstDay]){
-            sortedData[startDate.getDate()+this.props.selectedMonth.firstDay] = [];
-          }
-          sortedData[startDate.getDate()+this.props.selectedMonth.firstDay].push({
-            eventText : value.summary,
-            startTime : !fullDayDate ? `${startDate.getHours()}:${startDate.getMinutes() < 10 ? "0"+startDate.getMinutes() : startDate.getMinutes()}` : null
-          });
-        } else {
-          return;
+  processData(eventsArray){
+    let newProcessedData = {};
+    eventsArray.forEach(el=>{
+      if(el.start.date || el.start.dateTime){
+        const fullDayDate = el.start.date ? true : false;
+        // Remove Google Timezone info;
+        const startDate = fullDayDate ? new Date(el.start.date.indexOf('+') !== -1 ? el.start.date.split('+')[0] : el.start.date ) : new Date(el.start.dateTime.indexOf('+') !== -1 ? el.start.dateTime.split('+')[0] : el.start.dateTime);
+        if(!newProcessedData[startDate.getDate()+this.props.selectedMonth.firstDay]){
+          newProcessedData[startDate.getDate()+this.props.selectedMonth.firstDay] = [];
         }
-      });
-    });
-    this.setState({
-      sortedData
-    }, ()=>console.log(this.state.sortedData));
-  }
-  
-  componentDidMount(){
-    this.gapiInit();
-  }
-  
-  componentWillReceiveProps(nextProps){
-    
-    // Si nouvelle date, effacer les données dans fetchedData
-    if(nextProps.selectedMonth !== this.props.selectedMonth){
-      this.setState({
-        fetchedData : {},
-        sortData : {}
-      });
-    }
-
-    // Ne garder que les objets dont la clé se trouvent dans dans les nouvelles props
-    if(nextProps.selectedCalendars !== this.props.selectedCalendars){
-      this.setState({
-        fetchedData : _.pick(this.state.fetchedData, nextProps.selectedCalendars)
-      });
-    }
-    
-    if(
-      this.state.isSignedIn &&
-      googleApi &&
-      nextProps.selectedCalendars.length > 0 &&
-      nextProps.selectedMonth &&
-      nextProps.selectedCalendars !== this.props.selectedCalendars ||
-      nextProps.selectedMonth !== this.props.selectedMonth
-      ){
-        for(let i=0; i < nextProps.selectedCalendars.length; i++){
-          this.fetchCal(nextProps.selectedCalendars[i],nextProps.selectedMonth.timeMin,nextProps.selectedMonth.timeMax);
-        }
+        newProcessedData[startDate.getDate()+this.props.selectedMonth.firstDay].push({
+          eventText : el.summary,
+          startTime : !fullDayDate ? `${startDate.getHours()}:${startDate.getMinutes() < 10 ? "0"+startDate.getMinutes() : startDate.getMinutes()}` : null,
+          color : el.colorId ? colors[el.colorId] : "#f2c463"
+        });
+      } else {
+        return;
       }
+      this.setState({
+        processedData : {...this.state.processedData, ...newProcessedData}
+      }, ()=>this.props.updateFetchedData(this.state.processedData));
+    });
   }
   
   updateSigninStatus(isSignedIn, callback) {
@@ -122,7 +132,7 @@ export default class Connect extends Component {
     } else {
       gapi.auth2.getAuthInstance().signIn();
     }
-  }  
+  }
   
   fetchCal(calId, timeMin, timeMax){
     if(googleApi) {
@@ -136,12 +146,7 @@ export default class Connect extends Component {
         'orderBy': 'startTime'
       }).then(response => {
         var events = response.result.items;
-        this.setState({
-          fetchedData : {
-            [calId] : events,
-            ...this.state.fetchedData
-          }
-        }, ()=>this.sortData());
+        this.processData(events);
       });
     }
   }

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import _ from "lodash";
 
-import Connect from "../Connect/Connect";
-import Events from "../Events/Events";
-import Photos from "../Photos/Photos";
 import Calendar from "../../components/Calendar/Calendar";
+import Connect from "../Connect/Connect";
+import DropBox from "../DropBox/DropBox";
+import Print from "../Print/Print";
 import Select from "../../components/Select/Select";
 
 export default class ControlBox extends Component {
@@ -14,16 +14,26 @@ export default class ControlBox extends Component {
     this.state = {
       userIsAuthorized : false,
       calendarList : [],
+      fetchedData : {}, 
       monthsList : this.createMonthsList(),
+      imgBlobUrl : null,
       selectedCalendars : [],
       selectedMonth : this.createMonthsList()[0]
     };
     this.createMonthsList = this.createMonthsList.bind(this);
     this.renderComponents = this.renderComponents.bind(this);
+    this.updateFetchedData = this.updateFetchedData.bind(this);
     this.updateCalendarList = this.updateCalendarList.bind(this);
+    this.updateImgBlobUrl = this.updateImgBlobUrl.bind(this);
     this.updateSelectedCalendars = this.updateSelectedCalendars.bind(this);
     this.updateSelectedMonth = this.updateSelectedMonth.bind(this);
     this.userIsAuthorizedUpdate = this.userIsAuthorizedUpdate.bind(this);
+  }
+  
+  componentDidMount(){
+    if(this.props.updateSelectedMonth){
+      this.props.updateSelectedMonth(this.state.selectedMonth);
+    }
   }
   
   createMonthsList(){
@@ -44,7 +54,9 @@ export default class ControlBox extends Component {
         string : `${monthsNames[i]} ${year}`,
         timeMin : new Date(isoYear,month).toISOString(),
         timeMax : new Date(isoYear,month + 1).toISOString(),
-        firstDay : new Date(isoYear, month, 1).getDay() === 0 ? new Date(isoYear, month, 1).getDay() + 6 : new Date(isoYear, month, 1).getDay() -1
+        firstDay : new Date(isoYear, month, 1).getDay() === 0 ? new Date(isoYear, month, 1).getDay() + 6 : new Date(isoYear, month, 1).getDay() -1,
+        nbrOfDays : new Date(isoYear, month+1, 0).getDate(),
+        previousMonthNbrOfDays : new Date(isoYear, month, 0).getDate(),
       });
     }
     return months;
@@ -56,9 +68,17 @@ export default class ControlBox extends Component {
     });
   }
   
+  updateFetchedData(fetchedData){
+    this.setState({
+      fetchedData:fetchedData
+    }, ()=> {
+      this.props.updateFetchedData(this.state.fetchedData);
+    });
+  }
+  
   updateSelectedCalendars(e){
     this.setState({
-      selectedCalendars : e.target.checked ? this.state.selectedCalendars.concat(e.target.value) : _.pull(this.state.selectedCalendars, e.target.value)
+      selectedCalendars : e.target.checked ? this.state.selectedCalendars.concat(e.target.value) : this.state.selectedCalendars.filter(el => el !== e.target.value)
     });
   }
   
@@ -68,9 +88,15 @@ export default class ControlBox extends Component {
     });
   }
   
+  updateImgBlobUrl(url){
+    this.props.updateImgBlobUrl(url);
+  }
+  
   updateSelectedMonth(selectedValue){
     this.setState({
       selectedMonth : _.find(this.state.monthsList, {string : selectedValue})
+    }, () => {
+      this.props.updateSelectedMonth(this.state.selectedMonth);
     });
   }
   
@@ -79,9 +105,9 @@ export default class ControlBox extends Component {
       return (
         <div>
           <Select selectOptions={this.state.monthsList.map(el=>el.string)} selectOnChangeHandler={(e)=>{this.updateSelectedMonth(e.currentTarget.value)}}/>
-          <Photos/>
+          <DropBox updateImgBlobUrl={this.updateImgBlobUrl}/>
           <Calendar calendarList={this.state.calendarList} calendarCheckHandler={this.updateSelectedCalendars} />
-          <Events/>
+          <Print/>
         </div>
       );
     } else {
@@ -94,11 +120,13 @@ export default class ControlBox extends Component {
       <div className="ControlBox">
         <Connect 
           userIsAuthorizedUpdate={this.userIsAuthorizedUpdate} 
-          updateCalendarList={this.updateCalendarList} 
+          updateCalendarList={this.updateCalendarList}
+          updateFetchedData={this.updateFetchedData}
           selectedMonth={this.state.selectedMonth} 
           selectedCalendars={this.state.selectedCalendars}
         />
         {this.renderComponents()}
+        <img src={this.state.imgBlobUrl}/>
       </div>
     );
   }
