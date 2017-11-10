@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-export default function(props){
+export default function (props) {
   return (
     <div className="Button">
       <button onClick={()=>props.clickHandler()}>{props.title}</button>

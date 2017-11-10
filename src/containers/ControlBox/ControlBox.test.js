@@ -1,6 +1,7 @@
 import React from "react";
 import { mount, shallow} from 'enzyme';
 import { expect } from "chai";
+import sinon from 'sinon';
 
 import ControlBox from "./ControlBox";
 import Calendar from "../../components/Calendar/Calendar";
@@ -10,6 +11,8 @@ const setup = (customProps) => {
   const props = Object.assign({
     ...customProps
   });
+
+  const mockOnChange = sinon.spy();
   
   const wrapper = shallow(<ControlBox {...props} />);
   

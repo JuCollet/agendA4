@@ -65,6 +65,8 @@ export default class ControlBox extends Component {
   userIsAuthorizedUpdate(isAuthorized){
     this.setState({
       userIsAuthorized : isAuthorized
+    }, ()=>{
+      this.props.updateIsSignedIn(this.state.userIsAuthorized);
     });
   }
   

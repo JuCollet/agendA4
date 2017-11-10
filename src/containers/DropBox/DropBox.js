@@ -21,10 +21,11 @@ export default class DropBox extends Component {
     }
     
     fileInputHandler(e){
-        if( e.target.files && 
+        if( e &&
+            e.target.files && 
             e.target.files[0] &&
            (e.target.files[0].type === "image/jpeg" || e.target.files[0].type === "image/png")){
-            this.props.updateImgBlobUrl(URL.createObjectURL(e.target.files[0]));
+            this.props.updateImgBlobUrl(URL && URL.createObjectURL ? URL.createObjectURL(e.target.files[0]) : null);
         }
     }
     

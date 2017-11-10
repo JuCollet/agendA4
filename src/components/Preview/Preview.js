@@ -12,6 +12,7 @@ export default class Preview extends Component{
     };
     this.drawDates = this.drawDates.bind(this);
     this.drawPreview = this.drawPreview.bind(this);
+    this.drawImage = this.drawImage.bind(this);
   }
   
   componentDidMount(){
@@ -30,6 +31,7 @@ export default class Preview extends Component{
   
   componentDidUpdate(){
     this.drawPreview();
+    this.drawImage();
   }
   
   drawPreview(){
@@ -42,10 +44,6 @@ export default class Preview extends Component{
     };
     imageObj.src = bkgImg;
     this.drawDates();
-  }
-  
-  drawHeader(){
-    
   }
 
   drawDates(){
@@ -129,7 +127,7 @@ export default class Preview extends Component{
     ctx.fillStyle = "white";
     ctx.font="6px Lato";
     ctx.textAlign = "center";     
-    ctx.fillText(text,posX+(width/2),posY+(height/2)+2);
+    ctx.fillText(text,posX+(width/2),posY+(height/2)+1);
   }
   
   drawEvents(){
@@ -162,9 +160,19 @@ export default class Preview extends Component{
 
   }
   
-  renderImage(){
+  drawImage(){
+
     if(this.props.imgBlobUrl){
-      return <img src={this.props.imgBlobUrl} />
+      const c = this.c;
+      var ctx = c.getContext("2d");
+
+      if(!ctx)return;          
+
+      let img = new Image();
+      img.onload = function(){
+        ctx.drawImage(img, 30, 30, 350, 130);
+      }
+      img.src = this.props.imgBlobUrl;
     }
   }
   
@@ -172,7 +180,6 @@ export default class Preview extends Component{
     return (
       <div className="Preview">
         <canvas width="420" height="598" ref={el=>this.c = el}></canvas>
-        {this.renderImage()}
       </div>
     );    
   }

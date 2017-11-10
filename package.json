@@ -6,8 +6,8 @@
   "scripts": {
     "build": "npm run clean && webpack --progress",
     "clean": "rimraf public",
-    "test": "mocha -w test/helpers/browser.js 'src/**/*.test.js' --require ignore-styles",
-    "dev:hot": "webpack-dev-server --hot --inline --progress --colors --watch"
+    "test": "mocha -w test/helpers/browser.js \"src/**/*.test.js\" --require ignore-styles",
+    "dev:hot": "webpack-dev-server --hot --inline --progress --colors --watch --content-base public/"
   },
   "repository": {
     "type": "git",
@@ -42,6 +42,10 @@
     "css-loader": "^0.28.7",
     "enzyme": "^3.1.0",
     "enzyme-adapter-react-16": "^1.0.2",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0",
     "extract-text-webpack-plugin": "^2.0.0-beta.4",
     "html-webpack-plugin": "^2.30.1",
     "ignore-styles": "^5.0.1",
@@ -57,6 +61,6 @@
     "sinon": "^4.0.2",
     "style-loader": "^0.19.0",
     "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.3"
+    "webpack-dev-server": "^2.9.4"
   }
 }

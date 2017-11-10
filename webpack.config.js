@@ -9,15 +9,14 @@ module.exports = {
         vendor : ['react', 'lodash']
     },
     output : {
-        filename : '[name].[chunkhash].js',
+        filename : '[name].[hash].js',
         path : path.resolve(__dirname, "public")
     },
     devServer: {
         historyApiFallback: true,
         contentBase: __dirname + 'public',
         host: process.env.IP,
-        port: process.env.PORT,
-        "public": "agenda4-julesbe.c9users.io"
+        port: process.env.PORT
     },
     externals: {
         'cheerio': 'window',
