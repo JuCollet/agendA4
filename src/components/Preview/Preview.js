@@ -20,9 +20,15 @@ export default class Preview extends Component{
   }
 
   shouldComponentUpdate(nextprops){
+
+    if((nextprops.imgBlob && !this.props.imgBlob) ||
+        ((nextprops.imgBlob && this.props.imgBlob) && 
+        (nextprops.imgBlob.url !== this.props.imgBlob.url))){
+      return true;
+    }
+
     if(nextprops.selectedMonth !== this.props.selectedMonth ||
-       nextprops.fetchedData !== this.props.fetchedData ||
-       nextprops.imgBlobUrl !== this.props.imgBlobUrl){
+       nextprops.fetchedData !== this.props.fetchedData){
       return true;
     } else {
       return false;
@@ -65,14 +71,7 @@ export default class Preview extends Component{
     ctx.font="bold 16px Lato";
     ctx.textAlign = "center";     
     ctx.fillText(this.props.selectedMonth.string,210,200);
-    
-
-    // 1. Parcourir les 42 cases;
-    // 2. Si la case < firstDay, continuer
-    // 4. Si la case === firstDay, lancer un compteur "drawed"
-    // 3. toutes les 7 cases, incrémenter posY par offsetY
-    // 5. continuer la boucle jusqu'à ce que "drawed" égal le nombre de jours du mois "nbre of days"
-    
+        
     let firstPreviousDays = this.props.selectedMonth.previousMonthNbrOfDays - this.props.selectedMonth.firstDay;
     
     for(let i = 0, drawed = 1, nextDays = 1; i < 42; i++){
@@ -162,17 +161,23 @@ export default class Preview extends Component{
   
   drawImage(){
 
-    if(this.props.imgBlobUrl){
+    if(this.props.imgBlob.url){
       const c = this.c;
+      const offsetX = 20,
+            offsetY = 20,
+            width = 380,
+            height = 150;
       var ctx = c.getContext("2d");
 
-      if(!ctx)return;          
-
+      if(!ctx)return;
+      
       let img = new Image();
       img.onload = function(){
-        ctx.drawImage(img, 30, 30, 350, 130);
+        const sh = (this.width / width)*height;
+        const imgOffsetY = (this.height-sh)/2; // Center image in view zone
+        ctx.drawImage(img, 0, imgOffsetY, this.width, sh, offsetX, offsetY, width, height);
       }
-      img.src = this.props.imgBlobUrl;
+      img.src = this.props.imgBlob.url;
     }
   }
   

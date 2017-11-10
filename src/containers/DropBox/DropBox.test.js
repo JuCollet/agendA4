@@ -13,7 +13,7 @@ const setup = customProps => {
 
     const mockOnChange = sinon.spy();
     
-    const wrapper = shallow(<DropBox {...props} updateImgBlobUrl={mockOnChange} />);
+    const wrapper = shallow(<DropBox {...props} updateImgBlob={mockOnChange} />);
     
     return {
         mockOnChange,

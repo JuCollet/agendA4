@@ -12,12 +12,12 @@ export default class App extends Component {
         this.state = {
             selectedMonth : {},
             fetchedData : {},
-            imgBlobUrl : null,
+            imgBlob : {},
             isSignedIn : false
         };
         this.updateSelectedMonth = this.updateSelectedMonth.bind(this);
         this.updateFetchedData = this.updateFetchedData.bind(this);
-        this.updateImgBlobUrl = this.updateImgBlobUrl.bind(this);
+        this.updateImgBlob = this.updateImgBlob.bind(this);
         this.updateIsSignedIn = this.updateIsSignedIn.bind(this);        
     }
     
@@ -33,9 +33,9 @@ export default class App extends Component {
         });
     }    
     
-    updateImgBlobUrl(blobUrl){
+    updateImgBlob(imgBlob){
         this.setState({
-            imgBlobUrl : blobUrl
+            imgBlob : imgBlob
         });
     }
    
@@ -48,8 +48,8 @@ export default class App extends Component {
     render(){
         return(
             <div className="App">
-                {this.state.isSignedIn ? <Preview selectedMonth={this.state.selectedMonth} fetchedData={this.state.fetchedData} imgBlobUrl={this.state.imgBlobUrl}/> : null }
-                <ControlBox updateSelectedMonth={this.updateSelectedMonth} updateFetchedData={this.updateFetchedData} updateImgBlobUrl={this.updateImgBlobUrl} updateIsSignedIn={this.updateIsSignedIn}/>
+                {this.state.isSignedIn ? <Preview selectedMonth={this.state.selectedMonth} fetchedData={this.state.fetchedData} imgBlob={this.state.imgBlob}/> : null }
+                <ControlBox updateSelectedMonth={this.updateSelectedMonth} updateFetchedData={this.updateFetchedData} updateImgBlob={this.updateImgBlob} updateIsSignedIn={this.updateIsSignedIn}/>
             </div>
         );
     }

@@ -16,7 +16,6 @@ export default class ControlBox extends Component {
       calendarList : [],
       fetchedData : {}, 
       monthsList : this.createMonthsList(),
-      imgBlobUrl : null,
       selectedCalendars : [],
       selectedMonth : this.createMonthsList()[0]
     };
@@ -24,7 +23,7 @@ export default class ControlBox extends Component {
     this.renderComponents = this.renderComponents.bind(this);
     this.updateFetchedData = this.updateFetchedData.bind(this);
     this.updateCalendarList = this.updateCalendarList.bind(this);
-    this.updateImgBlobUrl = this.updateImgBlobUrl.bind(this);
+    this.updateImgBlob = this.updateImgBlob.bind(this);
     this.updateSelectedCalendars = this.updateSelectedCalendars.bind(this);
     this.updateSelectedMonth = this.updateSelectedMonth.bind(this);
     this.userIsAuthorizedUpdate = this.userIsAuthorizedUpdate.bind(this);
@@ -90,8 +89,8 @@ export default class ControlBox extends Component {
     });
   }
   
-  updateImgBlobUrl(url){
-    this.props.updateImgBlobUrl(url);
+  updateImgBlob(imgBlob){
+    this.props.updateImgBlob(imgBlob);
   }
   
   updateSelectedMonth(selectedValue){
@@ -107,7 +106,7 @@ export default class ControlBox extends Component {
       return (
         <div>
           <Select selectOptions={this.state.monthsList.map(el=>el.string)} selectOnChangeHandler={(e)=>{this.updateSelectedMonth(e.currentTarget.value)}}/>
-          <DropBox updateImgBlobUrl={this.updateImgBlobUrl}/>
+          <DropBox updateImgBlob={this.updateImgBlob}/>
           <Calendar calendarList={this.state.calendarList} calendarCheckHandler={this.updateSelectedCalendars} />
           <Print/>
         </div>
@@ -128,7 +127,6 @@ export default class ControlBox extends Component {
           selectedCalendars={this.state.selectedCalendars}
         />
         {this.renderComponents()}
-        <img src={this.state.imgBlobUrl}/>
       </div>
     );
   }
