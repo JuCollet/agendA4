@@ -7160,12 +7160,12 @@ var App = function (_Component) {
         _this.state = {
             selectedMonth: {},
             fetchedData: {},
-            imgBlobUrl: null,
+            imgBlob: {},
             isSignedIn: false
         };
         _this.updateSelectedMonth = _this.updateSelectedMonth.bind(_this);
         _this.updateFetchedData = _this.updateFetchedData.bind(_this);
-        _this.updateImgBlobUrl = _this.updateImgBlobUrl.bind(_this);
+        _this.updateImgBlob = _this.updateImgBlob.bind(_this);
         _this.updateIsSignedIn = _this.updateIsSignedIn.bind(_this);
         return _this;
     }
@@ -7185,10 +7185,10 @@ var App = function (_Component) {
             });
         }
     }, {
-        key: "updateImgBlobUrl",
-        value: function updateImgBlobUrl(blobUrl) {
+        key: "updateImgBlob",
+        value: function updateImgBlob(imgBlob) {
             this.setState({
-                imgBlobUrl: blobUrl
+                imgBlob: imgBlob
             });
         }
     }, {
@@ -7204,8 +7204,8 @@ var App = function (_Component) {
             return _react2.default.createElement(
                 "div",
                 { className: "App" },
-                this.state.isSignedIn ? _react2.default.createElement(_Preview2.default, { selectedMonth: this.state.selectedMonth, fetchedData: this.state.fetchedData, imgBlobUrl: this.state.imgBlobUrl }) : null,
-                _react2.default.createElement(_ControlBox2.default, { updateSelectedMonth: this.updateSelectedMonth, updateFetchedData: this.updateFetchedData, updateImgBlobUrl: this.updateImgBlobUrl, updateIsSignedIn: this.updateIsSignedIn })
+                this.state.isSignedIn ? _react2.default.createElement(_Preview2.default, { selectedMonth: this.state.selectedMonth, fetchedData: this.state.fetchedData, imgBlob: this.state.imgBlob }) : null,
+                _react2.default.createElement(_ControlBox2.default, { updateSelectedMonth: this.updateSelectedMonth, updateFetchedData: this.updateFetchedData, updateImgBlob: this.updateImgBlob, updateIsSignedIn: this.updateIsSignedIn })
             );
         }
     }]);
@@ -7283,7 +7283,6 @@ var ControlBox = function (_Component) {
       calendarList: [],
       fetchedData: {},
       monthsList: _this.createMonthsList(),
-      imgBlobUrl: null,
       selectedCalendars: [],
       selectedMonth: _this.createMonthsList()[0]
     };
@@ -7291,7 +7290,7 @@ var ControlBox = function (_Component) {
     _this.renderComponents = _this.renderComponents.bind(_this);
     _this.updateFetchedData = _this.updateFetchedData.bind(_this);
     _this.updateCalendarList = _this.updateCalendarList.bind(_this);
-    _this.updateImgBlobUrl = _this.updateImgBlobUrl.bind(_this);
+    _this.updateImgBlob = _this.updateImgBlob.bind(_this);
     _this.updateSelectedCalendars = _this.updateSelectedCalendars.bind(_this);
     _this.updateSelectedMonth = _this.updateSelectedMonth.bind(_this);
     _this.userIsAuthorizedUpdate = _this.userIsAuthorizedUpdate.bind(_this);
@@ -7373,9 +7372,9 @@ var ControlBox = function (_Component) {
       });
     }
   }, {
-    key: "updateImgBlobUrl",
-    value: function updateImgBlobUrl(url) {
-      this.props.updateImgBlobUrl(url);
+    key: "updateImgBlob",
+    value: function updateImgBlob(imgBlob) {
+      this.props.updateImgBlob(imgBlob);
     }
   }, {
     key: "updateSelectedMonth",
@@ -7402,7 +7401,7 @@ var ControlBox = function (_Component) {
             }), selectOnChangeHandler: function selectOnChangeHandler(e) {
               _this5.updateSelectedMonth(e.currentTarget.value);
             } }),
-          _react2.default.createElement(_DropBox2.default, { updateImgBlobUrl: this.updateImgBlobUrl }),
+          _react2.default.createElement(_DropBox2.default, { updateImgBlob: this.updateImgBlob }),
           _react2.default.createElement(_Calendar2.default, { calendarList: this.state.calendarList, calendarCheckHandler: this.updateSelectedCalendars }),
           _react2.default.createElement(_Print2.default, null)
         );
@@ -7423,8 +7422,7 @@ var ControlBox = function (_Component) {
           selectedMonth: this.state.selectedMonth,
           selectedCalendars: this.state.selectedCalendars
         }),
-        this.renderComponents(),
-        _react2.default.createElement("img", { src: this.state.imgBlobUrl })
+        this.renderComponents()
       );
     }
   }]);
@@ -7788,7 +7786,10 @@ var DropBox = function (_Component) {
         key: 'fileInputHandler',
         value: function fileInputHandler(e) {
             if (e && e.target.files && e.target.files[0] && (e.target.files[0].type === "image/jpeg" || e.target.files[0].type === "image/png")) {
-                this.props.updateImgBlobUrl(URL && URL.createObjectURL ? URL.createObjectURL(e.target.files[0]) : null);
+                var url = URL && URL.createObjectURL ? URL.createObjectURL(e.target.files[0]) : null;
+                this.props.updateImgBlob({
+                    url: url
+                });
             }
         }
     }, {
@@ -12318,7 +12319,12 @@ var Preview = function (_Component) {
   }, {
     key: "shouldComponentUpdate",
     value: function shouldComponentUpdate(nextprops) {
-      if (nextprops.selectedMonth !== this.props.selectedMonth || nextprops.fetchedData !== this.props.fetchedData || nextprops.imgBlobUrl !== this.props.imgBlobUrl) {
+
+      if (nextprops.imgBlob && !this.props.imgBlob || nextprops.imgBlob && this.props.imgBlob && nextprops.imgBlob.url !== this.props.imgBlob.url) {
+        return true;
+      }
+
+      if (nextprops.selectedMonth !== this.props.selectedMonth || nextprops.fetchedData !== this.props.fetchedData) {
         return true;
       } else {
         return false;
@@ -12364,12 +12370,6 @@ var Preview = function (_Component) {
       ctx.font = "bold 16px Lato";
       ctx.textAlign = "center";
       ctx.fillText(this.props.selectedMonth.string, 210, 200);
-
-      // 1. Parcourir les 42 cases;
-      // 2. Si la case < firstDay, continuer
-      // 4. Si la case === firstDay, lancer un compteur "drawed"
-      // 3. toutes les 7 cases, incrémenter posY par offsetY
-      // 5. continuer la boucle jusqu'à ce que "drawed" égal le nombre de jours du mois "nbre of days"
 
       var firstPreviousDays = this.props.selectedMonth.previousMonthNbrOfDays - this.props.selectedMonth.firstDay;
 
@@ -12467,17 +12467,23 @@ var Preview = function (_Component) {
     key: "drawImage",
     value: function drawImage() {
 
-      if (this.props.imgBlobUrl) {
+      if (this.props.imgBlob.url) {
         var c = this.c;
+        var offsetX = 20,
+            offsetY = 20,
+            width = 380,
+            height = 150;
         var ctx = c.getContext("2d");
 
         if (!ctx) return;
 
         var img = new Image();
         img.onload = function () {
-          ctx.drawImage(img, 30, 30, 350, 130);
+          var sh = this.width / width * height;
+          var imgOffsetY = (this.height - sh) / 2; // Center image in view zone
+          ctx.drawImage(img, 0, imgOffsetY, this.width, sh, offsetX, offsetY, width, height);
         };
-        img.src = this.props.imgBlobUrl;
+        img.src = this.props.imgBlob.url;
       }
     }
   }, {
