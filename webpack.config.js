@@ -2,6 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const htmlWebpackPlugin = require("html-webpack-plugin");
+const htmlWebpackHardDiskPlugin = require("html-webpack-harddisk-plugin");
 
 module.exports = {
     entry : {
@@ -44,9 +45,16 @@ module.exports = {
                 use : [
                     {
                         loader : "url-loader",
-                        options : { limit : 20000, name : "./img/[hash].[ext]"}
+                        options : { limit : 2000000, name : "./img/[hash].[ext]"}
                     },
                     "image-webpack-loader"
+                ]
+            }, {
+                test : /\.(ttf)$/,
+                use : [ 
+                    {
+                        loader : "file-loader"
+                    }
                 ]
             }
         ]
@@ -57,12 +65,14 @@ module.exports = {
             names: ['vendor', 'manifest']
         }),
         new htmlWebpackPlugin({
+            alwaysWriteToDisk: true,            
             title: 'AgendA4 - Print your Google Agenda with style.',
             template: 'src/index.ejs',
             files : {
                 css : ['styles/styles.css', ]
             }
         }),
+        new htmlWebpackHardDiskPlugin(),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV' : JSON.stringify(process.env.NODE_ENV)
         })

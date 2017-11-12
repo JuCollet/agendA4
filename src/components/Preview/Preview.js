@@ -7,9 +7,6 @@ export default class Preview extends Component{
   
   constructor(props){
     super(props);
-    this.state = {
-      pdf : ''
-    };
     this.drawDates = this.drawDates.bind(this);
     this.drawPreview = this.drawPreview.bind(this);
     this.drawImage = this.drawImage.bind(this);
@@ -33,6 +30,7 @@ export default class Preview extends Component{
     } else {
       return false;
     }
+    
   }
   
   componentDidUpdate(){

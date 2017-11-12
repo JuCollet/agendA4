@@ -1,4 +1,5 @@
 require('babel-register')();
+require('ignore-styles').default(['.ttf', '.less', '.png']);
 
 var jsdom = require('jsdom').jsdom;
 var configure = require('enzyme').configure;
