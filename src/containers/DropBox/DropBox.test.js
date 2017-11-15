@@ -13,18 +13,17 @@ const setup = customProps => {
 
     const mockOnChange = sinon.spy();
     
-    const wrapper = shallow(<DropBox {...props} updateImgBlob={mockOnChange} />);
+    const wrapper = mount(<DropBox {...props} updateImgBlob={mockOnChange} />);
     
     return {
         mockOnChange,
         wrapper
-    };
-    
+    }
 }
 
 describe('<DropBox/>', function(){
     it('should update the imgBlobUrl on input change', function(){
-        const { wrapper, mockOnChange } = setup();
+        const { wrapper, mockOnChange } = setup({test : true});
         wrapper.find('#file').simulate('change', {target : { files : [ { type : "image/jpeg" }]}});
         expect(mockOnChange.calledOnce).to.equal(true);
     });

@@ -4,22 +4,9 @@ export default class DropBox extends Component {
     
     constructor(props){
         super(props);
-        this.state = {
-            canDragnDrop: false
-        };
         this.fileInputHandler = this.fileInputHandler.bind(this);
     }
-    
-    componentDidMount(){
-     
-        const div = document.createElement('div');
-        if('draggable' in div || 'ondragstart' in div && 'ondrop' in div && 'FormData' in window && 'FileReader' in window){
-            this.setState({
-                canDragnDrop : true
-            });
-        }
-    }
-    
+        
     fileInputHandler(e){
         if( e &&
             e.target.files && 
@@ -31,15 +18,43 @@ export default class DropBox extends Component {
             });
         }
     }
+
+    onDragOver(e){
+        e.preventDefault();
+        e.currentTarget.classList.add("dragzone-hover");
+    }
+      
+    onDragLeave(e){
+        e.currentTarget.classList.remove("dragzone-hover");
+    }
+
+    onDrop(e){
+        e.preventDefault();
+        const dt = e.dataTransfer;
+        const url = URL && URL.createObjectURL ? URL.createObjectURL(dt.files[0]) : null;
+        this.props.updateImgBlob({
+            url : url
+        });
+        e.currentTarget.classList.remove("dragzone-hover");        
+    }
+
+    renderUploadInput(){
+        const div = document.createElement('div');
+        if(this.props.test === true){
+            return <input type="file" id="file" onChange={e=>this.fileInputHandler(e)}/>;
+        };
+        if('draggable' in div || 'ondragstart' in div && 'ondrop' in div && 'FormData' in window && 'FileReader' in window){
+            return <div className="dragzone" onDragOver={e => this.onDragOver(e)} onDragLeave={e => this.onDragLeave(e)} onDrop={e => this.onDrop(e)}>Drag your file here</div>;            
+        } else {
+            return <input type="file" id="file" onChange={e=>this.fileInputHandler(e)}/>;
+        }
+    }
     
     render(){
         return (
             <div>
                 <form className="dropbox" method="post" encType="multipart/form-data">
-                    <div className="dropbox_input">
-                        <input type="file" id="file" onChange={e=>this.fileInputHandler(e)}/>
-                        {this.state.canDragnDrop ? "can drag" : "cannot drag"}
-                    </div>
+                    {this.renderUploadInput()}
                 </form>
             </div>
         );

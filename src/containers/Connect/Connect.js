@@ -93,7 +93,7 @@ export default class Connect extends Component {
   }
   
   processData(eventsArray){
-    let newProcessedData = {};
+    let newProcessedData = this.state.processedData;
     eventsArray.forEach(el=>{
       if(el.start.date || el.start.dateTime){
         const fullDayDate = el.start.date ? true : false;
