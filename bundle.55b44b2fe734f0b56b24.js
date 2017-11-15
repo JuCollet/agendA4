@@ -12684,26 +12684,12 @@ var DropBox = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (DropBox.__proto__ || Object.getPrototypeOf(DropBox)).call(this, props));
 
-        _this.state = {
-            canDragnDrop: false
-        };
         _this.fileInputHandler = _this.fileInputHandler.bind(_this);
         return _this;
     }
 
     _createClass(DropBox, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-
-            var div = document.createElement('div');
-            if ('draggable' in div || 'ondragstart' in div && 'ondrop' in div && 'FormData' in window && 'FileReader' in window) {
-                this.setState({
-                    canDragnDrop: true
-                });
-            }
-        }
-    }, {
-        key: 'fileInputHandler',
+        key: "fileInputHandler",
         value: function fileInputHandler(e) {
             if (e && e.target.files && e.target.files[0] && (e.target.files[0].type === "image/jpeg" || e.target.files[0].type === "image/png")) {
                 var url = URL && URL.createObjectURL ? URL.createObjectURL(e.target.files[0]) : null;
@@ -12713,24 +12699,33 @@ var DropBox = function (_Component) {
             }
         }
     }, {
-        key: 'render',
-        value: function render() {
+        key: "renderUploadInput",
+        value: function renderUploadInput() {
             var _this2 = this;
 
+            var div = document.createElement('div');
+            if ('draggable' in div || 'ondragstart' in div && 'ondrop' in div && 'FormData' in window && 'FileReader' in window) {
+                return _react2.default.createElement(
+                    "div",
+                    { className: "dragzone" },
+                    "Drag your file here"
+                );
+            } else {
+                return _react2.default.createElement("input", { type: "file", id: "file", onChange: function onChange(e) {
+                        return _this2.fileInputHandler(e);
+                    } });
+            }
+        }
+    }, {
+        key: "render",
+        value: function render() {
             return _react2.default.createElement(
-                'div',
+                "div",
                 null,
                 _react2.default.createElement(
-                    'form',
-                    { className: 'dropbox', method: 'post', encType: 'multipart/form-data' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'dropbox_input' },
-                        _react2.default.createElement('input', { type: 'file', id: 'file', onChange: function onChange(e) {
-                                return _this2.fileInputHandler(e);
-                            } }),
-                        this.state.canDragnDrop ? "can drag" : "cannot drag"
-                    )
+                    "form",
+                    { className: "dropbox", method: "post", encType: "multipart/form-data" },
+                    this.renderUploadInput()
                 )
             );
         }

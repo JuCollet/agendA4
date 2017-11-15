@@ -11,3 +11,9 @@
   display: flex;
   padding: 50px;
 }
+.dragzone {
+  padding: 30px 30px;
+  background-color: white;
+  outline: 2px dashed black;
+  outline-offset: -10px;
+}
