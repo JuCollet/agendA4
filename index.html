@@ -3,7 +3,6 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
         <title>AgendA4 - Print your Google Agenda with style.</title>
     <link href="styles/styles.css" rel="stylesheet"></head>
     <body>
@@ -42,7 +41,8 @@
                 const loadingAnimation = setInterval(function(){
                     const randomWidth = Math.floor((Math.random()*80)+30);
                     loading.style.width = randomWidth + "%";
-                    if(!loading){
+                    // Removed wrapper when window.onload triggered;
+                    if(!document.querySelector('.loading-wrapper')){
                         clearInterval(loadingAnimation);
                     }
                     if(forth) {
@@ -55,6 +55,7 @@
                 }, 750)
             }())
         </script>
+
         <div id="root"></div>
-    <script type="text/javascript" src="manifest.f3e92f64905af7149dc6.js"></script><script type="text/javascript" src="vendor.f3e92f64905af7149dc6.js"></script><script type="text/javascript" src="bundle.f3e92f64905af7149dc6.js"></script></body>
+    <script type="text/javascript" src="manifest.7b35b1ea2e5a894440d8.js"></script><script type="text/javascript" src="vendor.7b35b1ea2e5a894440d8.js"></script><script type="text/javascript" src="bundle.7b35b1ea2e5a894440d8.js"></script></body>
 </html>
