@@ -6,13 +6,39 @@ const googleApi = (function(){
     let googleApi, userIsSignedIn = false;
 
     return {
+        fetchCalEvents, // get calendar events ([{calId, timeMin, timeMax}] or {calId, timeMin, timeMax}) return an array;
         init, // Initialize gapi object;
-        signIn,
-        signOut,
-        userIsSignedIn
+        signIn, // Sign in;
+        signOut, // Sign out;
+        userIsSignedIn // is the user connected ? => Boolean;
     }
 
-    function init(){
+    function fetchCalEvents(req){        
+        if(!userIsSignedIn || !googleApi.client) return;
+        let fetchCounter = 0, fetched = [];
+        const reqIsArray = Array.isArray(req);
+        
+        for(let i = 0; i < reqIsArray ? i < req.length : i < 1; i++){
+            googleApi.client.calendar.events.list({
+                'calendarId': reqIsArray ? req[i].calId : req.calId,
+                'timeMin': reqIsArray ? req[i].timeMin : req.timeMin,
+                'timeMax': reqIsArray ? req[i].timeMax : req.timeMax,
+                'showDeleted': false,
+                'singleEvents': true,
+                'maxResults': 50,
+                'orderBy': 'startTime'
+                }).then(res => {
+                  let events = res.result.items;
+                  fetched.concat(events);
+                  fetchCounter++;                  
+                  if(!reqIsArray || fetchCounter === req.length){
+                    return fetched;
+                };
+            });
+        };
+    };
+
+    function init(cb){
         const script = document.createElement("script");
         script.src = "https://apis.google.com/js/client.js";
         
@@ -25,29 +51,33 @@ const googleApi = (function(){
             }).then(() => {
               googleApi = gapi;
               gapi.auth2.getAuthInstance().isSignedIn.listen(_updateSigninStatus);
-              _updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+              _updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get(), cb);
             });
           });
         };
         document.body.appendChild(script);      
-    }
+    };
 
-    function signIn(){
-        if(gapi && gapi.auth2 && !userIsSignedIn){
-            gapi.auth2.getAuthInstance().signIn();            
-        }
-    }
+    function signIn(cb){
+        if(gapi && !userIsSignedIn){
+            gapi.auth2.getAuthInstance().signIn().then(() => {
+                cb(gapi.auth2.getAuthInstance().isSignedIn.get());
+            });
+        };
+    };
 
-    function signOut(){
-        if(gapi && gapi.auth2 && userIsSignedIn){
-            gapi.auth2.getAuthInstance().disconnect();                    
-        }
-    }
+    function signOut(cb){
+        if(gapi && userIsSignedIn){
+            gapi.auth2.getAuthInstance().disconnect().then(() => {
+                cb(gapi.auth2.getAuthInstance().isSignedIn.get());
+            });
+        };
+    };
 
     function _updateSigninStatus(isSignedIn, callback) {
         userIsSignedIn = isSignedIn;
-        console.log(userIsSignedIn)
-    }
+        callback(userIsSignedIn);
+    };
 
 }())
 

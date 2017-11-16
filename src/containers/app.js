@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 
 import "../assets/styles/styles.less";
-import logo from "../assets/img/logo.svg";
 
 import ControlBox from "./ControlBox/ControlBox";
 import Connect from "./Connect/Connect";
 import Preview from "../components/Preview/Preview";
+import Landing from "../components/Landing/Landing";
 
 import { googleApi as gapi } from "./app.services.js"
-gapi.init();
 
 export default class App extends Component {
     
@@ -25,49 +24,23 @@ export default class App extends Component {
         this.updateImgBlob = this.updateImgBlob.bind(this);
         this.updateIsSignedIn = this.updateIsSignedIn.bind(this);        
     }
-
+    
     componentDidMount(){
+        gapi.init(isSignedIn => {
+            this.setState({isSignedIn});
+        });
+    }
 
-    }
-    
-    updateSelectedMonth(selectedMonth){
-        this.setState({
-            selectedMonth : selectedMonth
-        });
-    }
-    
-    updateFetchedData(fetchedData){
-        this.setState({
-            fetchedData : fetchedData
-        });
-    }    
-    
-    updateImgBlob(imgBlob){
-        this.setState({
-            imgBlob : imgBlob
-        });
-    }
-   
-    updateIsSignedIn(isSignedIn){
-        this.setState({
-            isSignedIn : isSignedIn
-        })
-    }
+    updateSelectedMonth(selectedMonth){this.setState({selectedMonth});};
+    updateFetchedData(fetchedData){this.setState({fetchedData});};
+    updateImgBlob(imgBlob){this.setState({imgBlob});};
+    updateIsSignedIn(isSignedIn){this.setState({isSignedIn});};
 
     render(){
         if(this.state.isSignedIn){
-            return (
-                <div className="wrapper">
-                    <ControlBox updateSelectedMonth={this.updateSelectedMonth} updateFetchedData={this.updateFetchedData} updateImgBlob={this.updateImgBlob} updateIsSignedIn={this.updateIsSignedIn}/>
-                </div>
-            );
+            return <h1>Signed in !</h1>
         } else {
-            return (
-                <div className="wrapper wrapper-col-center">
-                    <img src={logo} width="250px"/>
-                    <div className="btn btn-blue" onClick={() => gapi.signIn()}>Connect</div>
-                </div>
-            );
+            return <Landing signIn={gapi.signIn} signOut={gapi.signOut} updateIsSignedIn={this.updateIsSignedIn}/>
         }
     }
 }
