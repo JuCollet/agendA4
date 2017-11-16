@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import "../assets/styles/styles.less";
+import logo from "../assets/img/logo.svg";
 
 import ControlBox from "./ControlBox/ControlBox";
 import Preview from "../components/Preview/Preview";
@@ -45,11 +46,25 @@ export default class App extends Component {
         })
     }
 
+    renderComponents(){
+        if(this.state.isSignedIn){
+            return (
+                <ControlBox updateSelectedMonth={this.updateSelectedMonth} updateFetchedData={this.updateFetchedData} updateImgBlob={this.updateImgBlob} updateIsSignedIn={this.updateIsSignedIn}/>                
+            );
+        } else {
+            return (
+                <div className="wrapper">
+                    <img src={logo} width="250px"/>
+                    <button>Login</button>
+                </div>
+            );
+        }
+    }
+
     render(){
         return(
             <div className="App">
-                {this.state.isSignedIn ? <Preview selectedMonth={this.state.selectedMonth} fetchedData={this.state.fetchedData} imgBlob={this.state.imgBlob}/> : null }
-                <ControlBox updateSelectedMonth={this.updateSelectedMonth} updateFetchedData={this.updateFetchedData} updateImgBlob={this.updateImgBlob} updateIsSignedIn={this.updateIsSignedIn}/>
+                {this.renderComponents()}
             </div>
         );
     }
