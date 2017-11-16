@@ -162,14 +162,15 @@ export default class Connect extends Component {
   }  
   
   render(){
-    
-    const title = this.state.isSignedIn ? "Se déconnecter" : "Se connecter";
-    
-    return (
-      <div className="Connect">
-        <Button clickHandler={this.handleAuthClick} title={title}/>
-      </div>
-    );
+    if(this.state.isSignedIn){
+      return (
+        <span>Se déconnecter</span>
+      )
+    } else {
+      return (
+        <div className="btn btn-blue margin-lg-top">Connecte ton agenda</div>
+      )
+    }
   }
   
 }

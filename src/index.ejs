@@ -3,7 +3,6 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
         <title><%= htmlWebpackPlugin.options.title %></title>
     </head>
     <body>
@@ -42,7 +41,8 @@
                 const loadingAnimation = setInterval(function(){
                     const randomWidth = Math.floor((Math.random()*80)+30);
                     loading.style.width = randomWidth + "%";
-                    if(!loading){
+                    // Removed wrapper when window.onload triggered;
+                    if(!document.querySelector('.loading-wrapper')){
                         clearInterval(loadingAnimation);
                     }
                     if(forth) {
@@ -55,6 +55,7 @@
                 }, 750)
             }())
         </script>
+
         <div id="root"></div>
     </body>
 </html>
