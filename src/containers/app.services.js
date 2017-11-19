@@ -3,40 +3,66 @@ const googleApi = (function(){
     const CLIENT_ID = '28576487880-usdrjfiq5c4e9t7992quhgs0vtcfgops.apps.googleusercontent.com';
     const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
     const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+    const colors = {
+        9:"#5484ed",
+        1:"#a4bdfc",
+        7:"#46d6db",
+        2:"#7ae7bf",
+        10:"#51b749",
+        5:"#fbd75b",
+        4:"#ffb878",
+        11:"#ff887c",
+        3:"#dc2127",
+        6:"#dbadff",
+        8:"#e1e1e1"
+    };
     let googleApi, userIsSignedIn = false;
 
     return {
         fetchCalEvents, // get calendar events ([{calId, timeMin, timeMax}] or {calId, timeMin, timeMax}) return an array;
+        fetchCalendarList, // get the list of user's calendars;
         init, // Initialize gapi object;
         signIn, // Sign in;
         signOut, // Sign out;
         userIsSignedIn // is the user connected ? => Boolean;
     }
 
-    function fetchCalEvents(req){        
+    function fetchCalEvents(req, timeMin, timeMax, firstDay, cb){        
         if(!userIsSignedIn || !googleApi.client) return;
         let fetchCounter = 0, fetched = [];
         const reqIsArray = Array.isArray(req);
-        
-        for(let i = 0; i < reqIsArray ? i < req.length : i < 1; i++){
+        const loops = reqIsArray ? req.length : 1
+
+        for(let i = 0; i < loops; i++){
             googleApi.client.calendar.events.list({
-                'calendarId': reqIsArray ? req[i].calId : req.calId,
-                'timeMin': reqIsArray ? req[i].timeMin : req.timeMin,
-                'timeMax': reqIsArray ? req[i].timeMax : req.timeMax,
+                'calendarId': reqIsArray ? req[i] : req.calId,
+                'timeMin': timeMin,
+                'timeMax': timeMax,
                 'showDeleted': false,
                 'singleEvents': true,
                 'maxResults': 50,
                 'orderBy': 'startTime'
                 }).then(res => {
                   let events = res.result.items;
-                  fetched.concat(events);
+                  fetched = fetched.concat(events);
                   fetchCounter++;                  
                   if(!reqIsArray || fetchCounter === req.length){
+                      if(cb){
+                          return cb(_processData(fetched, firstDay))
+                      }
                     return fetched;
                 };
             });
         };
     };
+
+    function fetchCalendarList(cb){
+        if(!userIsSignedIn || !googleApi.client) return;        
+        googleApi.client.calendar.calendarList.list()
+            .then(response => {
+                return cb(response.result.items);
+            });
+    }
 
     function init(cb){
         const script = document.createElement("script");
@@ -58,6 +84,28 @@ const googleApi = (function(){
         document.body.appendChild(script);      
     };
 
+    function _processData(eventsArray, firstDay){
+        let newProcessedData = {};
+        eventsArray.forEach(el=>{
+            if(el.start.date || el.start.dateTime){
+                const fullDayDate = el.start.date ? true : false;
+                // Remove Google Timezone info;
+                const startDate = fullDayDate ? new Date(el.start.date.indexOf('+') !== -1 ? el.start.date.split('+')[0] : el.start.date ) : new Date(el.start.dateTime.indexOf('+') !== -1 ? el.start.dateTime.split('+')[0] : el.start.dateTime);
+                if(!newProcessedData[startDate.getDate()+firstDay]){
+                    newProcessedData[startDate.getDate()+firstDay] = [];
+                }
+                newProcessedData[startDate.getDate()+firstDay].push({
+                    eventText : el.summary,
+                    startTime : !fullDayDate ? `${startDate.getHours()}:${startDate.getMinutes() < 10 ? "0"+startDate.getMinutes() : startDate.getMinutes()}` : null,
+                    color : el.colorId ? colors[el.colorId] : "#f2c463"
+                });
+            } else {
+                return;
+            }
+        });
+        return newProcessedData;
+    }
+
     function signIn(cb){
         if(gapi && !userIsSignedIn){
             gapi.auth2.getAuthInstance().signIn().then(() => {
@@ -76,7 +124,7 @@ const googleApi = (function(){
 
     function _updateSigninStatus(isSignedIn, callback) {
         userIsSignedIn = isSignedIn;
-        callback(userIsSignedIn);
+        if(callback) callback(userIsSignedIn);
     };
 
 }())

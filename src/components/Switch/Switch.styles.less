@@ -1,0 +1,52 @@
+@blue : #56CCF2;
+@green : #4AC87F;
+
+.switch {
+    display: flex;
+    align-items: center;
+    margin-bottom: 7px;
+    cursor: pointer;
+    &:last-of-type {
+        margin-bottom: initial;
+    }
+    &.active {
+        .switch-toggle{
+            background-color: @green;
+    
+            .switch-toggle-cursor {
+                left: 19px;
+                background: white;
+            }
+        }
+    }
+}
+
+.switch-toggle {
+    height: 16px;
+    width: 32px;
+    border-radius: 10px;
+    background: white;
+    transition: .1s;
+    box-shadow: 1px 1px rgba(0,0,0,0.1) inset;
+
+    .switch-toggle-cursor {
+        position: relative;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        top: 3px;
+        left: 3px;
+        background: @blue;
+        box-shadow: 1px 1px rgba(0,0,0,0.1);        
+        transition: .1s;
+    }
+}
+
+.switch-label {
+    position: relative;
+    bottom: 1px;
+    margin-left: 10px;
+    font-family: 'Lato';
+    font-size: 1em;
+    color: white;
+}

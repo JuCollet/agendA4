@@ -1,0 +1,26 @@
+@red : #EB5757;
+
+.Select {
+    list-style: none;
+    padding: 0;
+
+    .option-box {
+        display: inline-block;   
+        padding: 5px 10px;
+        margin-bottom: 5px;
+        margin-right: 5px;
+        background: @red;
+        cursor: pointer;
+    }
+
+    .option-box:hover {
+        background: darken(@red, 5%);
+    }
+
+    li {
+        display: inline-block;        
+        font-family: 'Roboto Slab';
+        color: white;
+    }
+
+}

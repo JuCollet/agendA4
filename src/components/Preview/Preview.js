@@ -1,6 +1,9 @@
 /*global Image*/
 
 import React, { Component } from "react";
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
+import "./Preview.anim.less";
 import bkgImg from "../../assets/img/calPreview_bkg_420x594.png";
 
 export default class Preview extends Component{
@@ -13,31 +16,9 @@ export default class Preview extends Component{
   }
   
   componentDidMount(){
-    this.drawPreview();
+    //this.drawPreview();
   }
-
-  shouldComponentUpdate(nextprops){
-
-    if((nextprops.imgBlob && !this.props.imgBlob) ||
-        ((nextprops.imgBlob && this.props.imgBlob) && 
-        (nextprops.imgBlob.url !== this.props.imgBlob.url))){
-      return true;
-    }
-
-    if(nextprops.selectedMonth !== this.props.selectedMonth ||
-       nextprops.fetchedData !== this.props.fetchedData){
-      return true;
-    } else {
-      return false;
-    }
     
-  }
-  
-  componentDidUpdate(){
-    this.drawPreview();
-    this.drawImage();
-  }
-  
   drawPreview(){
     const c = this.c;
     const ctx = c.getContext("2d");
@@ -181,9 +162,19 @@ export default class Preview extends Component{
   
   render(){
     return (
-      <div className="Preview">
-        <canvas width="420" height="598" ref={el=>this.c = el}></canvas>
-      </div>
+      <ReactCSSTransitionGroup
+      component="div"
+      className="reactCSSTransitionGroupDiv"
+      transitionAppear={true}
+      transitionAppearTimeout={250}                
+      transitionEnterTimeout={250}
+      transitionLeaveTimeout={250}
+      transitionName="SlideRight">
+        <div className="preview">
+          <canvas className="preview-canvas" width="420" height="598" ref={el=>this.c = el}></canvas>
+          <div className="preview-btn">Télécharger</div>
+        </div>
+      </ReactCSSTransitionGroup>
     );    
   }
 }
