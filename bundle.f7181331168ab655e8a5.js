@@ -14376,7 +14376,6 @@ var Print = function (_Component) {
                             if (arraybuffer) {
                                 var img = new Image();
                                 img.onload = function () {
-                                    debugger;
                                     var ratioHeight = x.selectedStyle.image.width / this.width * this.height;
                                     var imgOffsetY = (ratioHeight - x.selectedStyle.image.height) / 2;
                                     x.doc.save();
@@ -20156,6 +20155,8 @@ function _drawRect(ctx, posX, posY) {
 }
 
 function _drawImage(ctx, imgBlob, x, y, width, height, radius) {
+
+    if (!imgBlob || !imgBlob.url) return;
 
     var img = new Image();
 
