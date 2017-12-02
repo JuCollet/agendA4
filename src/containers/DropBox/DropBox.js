@@ -42,7 +42,7 @@ export default class DropBox extends Component {
             return <input type="file" id="file" onChange={e=>this.fileInputHandler(e)}/>;
         };
         if('draggable' in div || 'ondragstart' in div && 'ondrop' in div && 'FormData' in window && 'FileReader' in window){
-            return <div className="dragzone" onDragOver={e => this.onDragOver(e)} onDragLeave={e => this.onDragLeave(e)} onDrop={e => this.onDrop(e)}>Dépose ici une image</div>;            
+            return <div className="dragzone" onDragOver={e => this.onDragOver(e)} onDragLeave={e => this.onDragLeave(e)} onDrop={e => this.onDrop(e)}>Dépose ici ton image</div>;            
         } else {
             return <input type="file" id="file" onChange={e=>this.fileInputHandler(e)}/>;
         }

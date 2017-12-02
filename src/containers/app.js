@@ -22,6 +22,8 @@ export default class App extends Component {
             imgBlob : {},
             isSignedIn : false
         };
+        this.resetState = this.resetState.bind(this);
+        this.updateCalendarList = this.updateCalendarList.bind(this);
         this.updateSelectedCalendars = this.updateSelectedCalendars.bind(this);
         this.updateSelectedMonth = this.updateSelectedMonth.bind(this);
         this.updateFetchedData = this.updateFetchedData.bind(this);
@@ -32,27 +34,37 @@ export default class App extends Component {
     
     componentDidMount(){
         gapi.init(isSignedIn => {
-            this.setState({isSignedIn},
-            gapi.fetchCalendarList(calendarList => {
-                this.setState({calendarList})
-            }));
+            this.setState({isSignedIn}, this.updateCalendarList);
+        });
+    }
+
+    resetState(){
+        this.setState({
+            fetchedData : {},
+            selectedCalendars : []
+        });
+    }
+
+    updateCalendarList(){
+        gapi.fetchCalendarList(calendarList => {
+            this.setState({calendarList})
         });
     }
 
     updateSelectedCalendars(selectedCalendars){
         let { timeMin, timeMax, firstDay } = this.state.selectedMonth;
-        this.setState({selectedCalendars}, () => {
+        this.setState({selectedCalendars, fetchedData : {}}, () => {
             gapi.fetchCalEvents(this.state.selectedCalendars, timeMin, timeMax, firstDay, fetchedData => {
                 this.setState({fetchedData});
-            });
+            }, () => this.updateIsSignedIn(false));
         });
     };
     updateSelectedMonth(selectedMonth){
-        let { timeMin, timeMax, firstDay } = this.state.selectedMonth;        
-        this.setState({selectedMonth}, () => {
+        this.setState({selectedMonth, fetchedData : {}}, () => {
+            let { timeMin, timeMax, firstDay } = this.state.selectedMonth;
             gapi.fetchCalEvents(this.state.selectedCalendars, timeMin, timeMax, firstDay, fetchedData => {
                 this.setState({fetchedData});
-            });
+            }, () => this.updateIsSignedIn());
         });
     };
     updateSelectedStyle(selectedStyle){this.setState({selectedStyle});};
@@ -64,12 +76,18 @@ export default class App extends Component {
         if(this.state.isSignedIn){
             return (
                 <div className="app-wrapper">
-                    <Preview />
+                    <Preview
+                        fetchedData={this.state.fetchedData}
+                        imgBlob={this.state.imgBlob}
+                        selectedMonth={this.state.selectedMonth}
+                        selectedStyle={this.state.selectedStyle}
+                    />
                     <Control 
                         calendarList={this.state.calendarList}
                         signOut={gapi.signOut}
                         selectedMonth={this.state.selectedMonth}
                         selectedCalendars={this.state.selectedCalendars}
+                        resetState={this.resetState}
                         updateImgBlob={this.updateImgBlob}
                         updateIsSignedIn={this.updateIsSignedIn}                        
                         updateSelectedCalendars={this.updateSelectedCalendars}
@@ -79,7 +97,7 @@ export default class App extends Component {
                 </div>
             )
         } else {
-            return <Landing signIn={gapi.signIn} updateIsSignedIn={this.updateIsSignedIn}/>
+            return <Landing signIn={gapi.signIn} signInCallback={this.updateCalendarList} updateIsSignedIn={this.updateIsSignedIn}/>
         }
     }
 }

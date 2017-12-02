@@ -27,7 +27,7 @@ const googleApi = (function(){
         userIsSignedIn // is the user connected ? => Boolean;
     }
 
-    function fetchCalEvents(req, timeMin, timeMax, firstDay, cb){        
+    function fetchCalEvents(req, timeMin, timeMax, firstDay, cb, err){        
         if(!userIsSignedIn || !googleApi.client) return;
         let fetchCounter = 0, fetched = [];
         const reqIsArray = Array.isArray(req);
@@ -52,12 +52,15 @@ const googleApi = (function(){
                       }
                     return fetched;
                 };
-            });
+                }).catch(e => {
+                    err();
+                })
         };
+        return cb({}); // Set empty object state if there's no calendar in selectedCalendars array.
     };
 
     function fetchCalendarList(cb){
-        if(!userIsSignedIn || !googleApi.client) return;        
+        if(!userIsSignedIn || !googleApi.client) return;
         googleApi.client.calendar.calendarList.list()
             .then(response => {
                 return cb(response.result.items);
@@ -106,10 +109,12 @@ const googleApi = (function(){
         return newProcessedData;
     }
 
-    function signIn(cb){
+    function signIn(cb, cb2){
         if(gapi && !userIsSignedIn){
             gapi.auth2.getAuthInstance().signIn().then(() => {
+                userIsSignedIn = true;
                 cb(gapi.auth2.getAuthInstance().isSignedIn.get());
+                cb2();
             });
         };
     };

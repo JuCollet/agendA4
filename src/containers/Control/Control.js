@@ -26,7 +26,7 @@ export default class Control extends Component {
         this.props.updateSelectedMonth(Month.getCurrentMonth());
     }
 
-    renderCalendarSwitches(){
+    renderCalendarSwitches(){        
         return this.props.calendarList.map(el => {
             return <Switch key={el.id} title={el.summary} id={el.id} switchHandler={this.switchHandler} />
         })
@@ -55,7 +55,10 @@ export default class Control extends Component {
             <div className="control">
                 <div className="control-header">
                     <img src={logo}/>
-                    <span onClick={() => this.props.signOut(this.props.updateIsSignedIn)} className="link-underline">Se déconnecter</span>
+                    <span onClick={() => {
+                        this.props.signOut(this.props.updateIsSignedIn);
+                        this.props.resetState();
+                    }} className="link-underline">Se déconnecter</span>
                 </div>
                 <ReactCSSTransitionGroup
                     component="div"
