@@ -1,71 +1,104 @@
 import React, { Component } from "react";
 
 import "../assets/styles/styles.less";
-import logo from "../assets/img/logo.svg";
+import stylesList from "../assets/calendarStyles";
 
-import ControlBox from "./ControlBox/ControlBox";
+import Control from "./Control/Control";
 import Preview from "../components/Preview/Preview";
+import Landing from "../components/Landing/Landing";
+
+import { googleApi as gapi } from "./app.services.js"
 
 export default class App extends Component {
     
     constructor(props){
         super(props);
         this.state = {
+            calendarList : [],
+            selectedCalendars : [],
             selectedMonth : {},
+            selectedStyle : stylesList[0],
             fetchedData : {},
             imgBlob : {},
             isSignedIn : false
         };
+        this.resetState = this.resetState.bind(this);
+        this.updateCalendarList = this.updateCalendarList.bind(this);
+        this.updateSelectedCalendars = this.updateSelectedCalendars.bind(this);
         this.updateSelectedMonth = this.updateSelectedMonth.bind(this);
         this.updateFetchedData = this.updateFetchedData.bind(this);
         this.updateImgBlob = this.updateImgBlob.bind(this);
-        this.updateIsSignedIn = this.updateIsSignedIn.bind(this);        
+        this.updateIsSignedIn = this.updateIsSignedIn.bind(this);
+        this.updateSelectedStyle = this.updateSelectedStyle.bind(this);
     }
     
-    updateSelectedMonth(selectedMonth){
-        this.setState({
-            selectedMonth : selectedMonth
+    componentDidMount(){
+        gapi.init(isSignedIn => {
+            this.setState({isSignedIn}, this.updateCalendarList);
         });
-    }
-    
-    updateFetchedData(fetchedData){
-        this.setState({
-            fetchedData : fetchedData
-        });
-    }    
-    
-    updateImgBlob(imgBlob){
-        this.setState({
-            imgBlob : imgBlob
-        });
-    }
-   
-    updateIsSignedIn(isSignedIn){
-        this.setState({
-            isSignedIn : isSignedIn
-        })
     }
 
-    renderComponents(){
-        if(this.state.isSignedIn){
-            return (
-                <ControlBox updateSelectedMonth={this.updateSelectedMonth} updateFetchedData={this.updateFetchedData} updateImgBlob={this.updateImgBlob} updateIsSignedIn={this.updateIsSignedIn}/>                
-            );
-        } else {
-            return (
-                <div className="wrapper">
-                    <img src={logo} width="250px"/>
-                    <button>Login</button>
-                </div>
-            );
-        }
+    resetState(){
+        this.setState({
+            fetchedData : {},
+            selectedCalendars : [],
+            selectedStyle : stylesList[0]
+        });
     }
+
+    updateCalendarList(){
+        gapi.fetchCalendarList(calendarList => {
+            this.setState({calendarList})
+        });
+    }
+
+    updateSelectedCalendars(selectedCalendars){
+        let { timeMin, timeMax, firstDay } = this.state.selectedMonth;
+        this.setState({selectedCalendars, fetchedData : {}}, () => {
+            gapi.fetchCalEvents(this.state.selectedCalendars, timeMin, timeMax, firstDay, fetchedData => {
+                this.setState({fetchedData});
+            }, () => this.updateIsSignedIn(false));
+        });
+    };
+    updateSelectedMonth(selectedMonth){
+        this.setState({selectedMonth, fetchedData : {}}, () => {
+            let { timeMin, timeMax, firstDay } = this.state.selectedMonth;
+            gapi.fetchCalEvents(this.state.selectedCalendars, timeMin, timeMax, firstDay, fetchedData => {
+                this.setState({fetchedData});
+            }, () => this.updateIsSignedIn());
+        });
+    };
+    updateSelectedStyle(selectedStyle){this.setState({selectedStyle});};
+    updateFetchedData(fetchedData){this.setState({fetchedData});};
+    updateImgBlob(imgBlob){this.setState({imgBlob});};
+    updateIsSignedIn(isSignedIn){this.setState({isSignedIn});};
 
     render(){
-        return(
-            <div className="App">
-                {this.renderComponents()}
-            </div>
-        );
+        if(this.state.isSignedIn){
+            return (
+                <div className="app-wrapper">
+                    <Preview
+                        fetchedData={this.state.fetchedData}
+                        imgBlob={this.state.imgBlob}
+                        selectedMonth={this.state.selectedMonth}
+                        selectedStyle={this.state.selectedStyle}
+                    />
+                    <Control 
+                        calendarList={this.state.calendarList}
+                        signOut={gapi.signOut}
+                        selectedMonth={this.state.selectedMonth}
+                        selectedCalendars={this.state.selectedCalendars}
+                        resetState={this.resetState}
+                        updateImgBlob={this.updateImgBlob}
+                        updateIsSignedIn={this.updateIsSignedIn}                        
+                        updateSelectedCalendars={this.updateSelectedCalendars}
+                        updateSelectedMonth={this.updateSelectedMonth}
+                        updateSelectedStyle={this.updateSelectedStyle}
+                    />
+                </div>
+            )
+        } else {
+            return <Landing signIn={gapi.signIn} signInCallback={this.updateCalendarList} updateIsSignedIn={this.updateIsSignedIn}/>
+        }
     }
 }

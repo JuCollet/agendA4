@@ -3,12 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
         <title>AgendA4 - Print your Google Agenda with style.</title>
     <link href="styles/styles.css" rel="stylesheet"></head>
     <body>
         <div class="loading-wrapper">
-            <svg width="250" viewBox="0 0 366 108" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <svg width="300" viewBox="0 0 366 108" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <g id="Canvas" transform="translate(183 1218)">
                 <g id="Vector">
                 <use xlink:href="#path0_fill" transform="translate(-183 -1218)" fill="#FFFFFF"/>
@@ -42,11 +41,12 @@
                 const loadingAnimation = setInterval(function(){
                     const randomWidth = Math.floor((Math.random()*80)+30);
                     loading.style.width = randomWidth + "%";
-                    if(!loading){
+                    // Removed wrapper when window.onload triggered;
+                    if(!document.querySelector('.loading-wrapper')){
                         clearInterval(loadingAnimation);
                     }
                     if(forth) {
-                        loading.style.transform = "translateX(250px)"
+                        loading.style.transform = "translateX(300px)"
                         forth = !forth;
                     } else {
                         loading.style.transform = "translateX(-100%)"
@@ -55,6 +55,7 @@
                 }, 750)
             }())
         </script>
+
         <div id="root"></div>
     <script type="text/javascript" src="manifest.1c398f7891fca448d4be.js"></script><script type="text/javascript" src="vendor.1c398f7891fca448d4be.js"></script><script type="text/javascript" src="bundle.1c398f7891fca448d4be.js"></script></body>
 </html>

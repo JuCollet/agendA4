@@ -28,6 +28,7 @@
     "lodash": "^4.17.4",
     "pdfkit": "^0.8.3",
     "react": "^16.0.0",
+    "react-addons-css-transition-group": "^15.6.2",
     "react-dom": "^16.0.0",
     "url-loader": "^0.6.2"
   },
