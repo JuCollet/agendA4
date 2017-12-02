@@ -10,7 +10,7 @@ module.exports = {
         vendor : ['react', 'lodash']
     },
     output : {
-        filename : '[name].[hash].js',
+        filename : '[name].[chunkhash].js',
         path : path.resolve(__dirname, "public")
     },
     devServer: {
