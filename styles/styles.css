@@ -219,16 +219,6 @@ h2 {
 .margin-lg-top {
   margin-top: 25px;
 }
-.SlideUp-appear {
-  -webkit-transform: translateY(100vh);
-          transform: translateY(100vh);
-}
-.SlideUp-appear.SlideUp-appear-active {
-  -webkit-transform: translateY(0);
-          transform: translateY(0);
-  -webkit-transition: 0.25s ease-out;
-  transition: 0.25s ease-out;
-}
 .SlideRight-appear {
   -webkit-transform: translateX(-100%);
           transform: translateX(-100%);
@@ -239,46 +229,15 @@ h2 {
   -webkit-transition: 0.25s ease-out;
   transition: 0.25s ease-out;
 }
-.styles-list {
-  list-style: none;
-  padding: 0;
+.SlideUp-appear {
+  -webkit-transform: translateY(100vh);
+          transform: translateY(100vh);
 }
-.styles-list li {
-  display: inline-block;
-  margin-right: 10px;
-}
-.styles-list .styles-item {
-  display: inline-block;
-  opacity: .6;
-  text-align: center;
-  -webkit-transition: .1s;
-  transition: .1s;
-  cursor: pointer;
-}
-.styles-list .styles-item.active,
-.styles-list .styles-item:hover {
-  opacity: 1;
-}
-.styles-list .styles-item.active img,
-.styles-list .styles-item:hover img {
-  -webkit-box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.05);
-          box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.05);
-}
-.styles-list img {
-  z-index: 999;
-  display: block;
-  background: white;
-  border-radius: 4px;
-}
-.styles-list .styles-label {
-  display: inline-block;
-  padding: 3px 8px 5px 8px;
-  text-align: center;
-  font-family: 'Lato';
-  font-size: .8em;
-  border-radius: 0px 0px 4px 4px;
-  background-color: #27beee;
-  color: white;
+.SlideUp-appear.SlideUp-appear-active {
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+  -webkit-transition: 0.25s ease-out;
+  transition: 0.25s ease-out;
 }
 .switch {
   display: -webkit-box;
@@ -329,6 +288,47 @@ h2 {
   margin-left: 10px;
   font-family: 'Lato';
   font-size: 1em;
+  color: white;
+}
+.styles-list {
+  list-style: none;
+  padding: 0;
+}
+.styles-list li {
+  display: inline-block;
+  margin-right: 10px;
+}
+.styles-list .styles-item {
+  display: inline-block;
+  opacity: .6;
+  text-align: center;
+  -webkit-transition: .1s;
+  transition: .1s;
+  cursor: pointer;
+}
+.styles-list .styles-item.active,
+.styles-list .styles-item:hover {
+  opacity: 1;
+}
+.styles-list .styles-item.active img,
+.styles-list .styles-item:hover img {
+  -webkit-box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.05);
+}
+.styles-list img {
+  z-index: 999;
+  display: block;
+  background: white;
+  border-radius: 4px;
+}
+.styles-list .styles-label {
+  display: inline-block;
+  padding: 3px 8px 5px 8px;
+  text-align: center;
+  font-family: 'Lato';
+  font-size: .8em;
+  border-radius: 0px 0px 4px 4px;
+  background-color: #27beee;
   color: white;
 }
 .Select {
