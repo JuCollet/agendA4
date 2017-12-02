@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import registerFonts from "./registerFonts"
 
 import PDFDocument from "./pdfkit";
 import downloadjs from "downloadjs";
@@ -80,8 +79,9 @@ export default class Print extends Component {
                         if(arraybuffer){
                             let img = new Image();
                             img.onload = function(){
-                                const ratioHeight = (x.selectedStyle.image.width / this.width) * x.selectedStyle.image.height;
-                                const imgOffsetY = (x.selectedStyle.image.height - ratioHeight) / 2;
+                                debugger
+                                const ratioHeight = (x.selectedStyle.image.width / this.width) * this.height;
+                                const imgOffsetY = (ratioHeight - x.selectedStyle.image.height) / 2;
                                 x.doc.save();
                                 x.doc.roundedRect(x.selectedStyle.image.x, x.selectedStyle.image.y, x.selectedStyle.image.width, x.selectedStyle.image.height, x.selectedStyle.image.radius)
                                      .clip()

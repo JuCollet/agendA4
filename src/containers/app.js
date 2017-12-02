@@ -41,7 +41,8 @@ export default class App extends Component {
     resetState(){
         this.setState({
             fetchedData : {},
-            selectedCalendars : []
+            selectedCalendars : [],
+            selectedStyle : stylesList[0]
         });
     }
 
