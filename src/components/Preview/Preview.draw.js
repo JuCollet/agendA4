@@ -103,16 +103,15 @@ function _drawRect(ctx, posX, posY, color = "#f2c463", radius = 50, width = 300,
 
 function _drawImage(ctx, imgBlob, x, y, width, height, radius){
 
-    if(!imgBlob || !imgBlob.url) return;
-
-    let img = new Image();
-
-    img.onload = function(){
-        const sh = (this.width / width)*height;
-        const imgOffsetY = (this.height-sh)/2; // Center image in view zone
-        ctx.drawImage(img, 0, imgOffsetY, this.width, sh, x, y, width, height);
+    if(imgBlob && imgBlob.url){
+        let img = new Image();        
+        img.onload = function(){
+            const sh = (this.width / width)*height;
+            const imgOffsetY = (this.height-sh)/2; // Center image in view zone
+            ctx.drawImage(img, 0, imgOffsetY, this.width, sh, x, y, width, height);
+        }
+        img.src = imgBlob.url;
     }
-    img.src = imgBlob.url;
 
     if(radius === null || radius > 0) _drawRect(ctx, x, y, undefined, radius, width, height, true);
 }

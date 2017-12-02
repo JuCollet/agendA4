@@ -20156,16 +20156,15 @@ function _drawRect(ctx, posX, posY) {
 
 function _drawImage(ctx, imgBlob, x, y, width, height, radius) {
 
-    if (!imgBlob || !imgBlob.url) return;
-
-    var img = new Image();
-
-    img.onload = function () {
-        var sh = this.width / width * height;
-        var imgOffsetY = (this.height - sh) / 2; // Center image in view zone
-        ctx.drawImage(img, 0, imgOffsetY, this.width, sh, x, y, width, height);
-    };
-    img.src = imgBlob.url;
+    if (imgBlob && imgBlob.url) {
+        var img = new Image();
+        img.onload = function () {
+            var sh = this.width / width * height;
+            var imgOffsetY = (this.height - sh) / 2; // Center image in view zone
+            ctx.drawImage(img, 0, imgOffsetY, this.width, sh, x, y, width, height);
+        };
+        img.src = imgBlob.url;
+    }
 
     if (radius === null || radius > 0) _drawRect(ctx, x, y, undefined, radius, width, height, true);
 }
