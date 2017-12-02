@@ -103,6 +103,8 @@ function _drawRect(ctx, posX, posY, color = "#f2c463", radius = 50, width = 300,
 
 function _drawImage(ctx, imgBlob, x, y, width, height, radius){
 
+    if(!imgBlob || !imgBlob.url) return;
+
     let img = new Image();
 
     img.onload = function(){

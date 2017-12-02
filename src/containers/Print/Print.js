@@ -79,7 +79,6 @@ export default class Print extends Component {
                         if(arraybuffer){
                             let img = new Image();
                             img.onload = function(){
-                                debugger
                                 const ratioHeight = (x.selectedStyle.image.width / this.width) * this.height;
                                 const imgOffsetY = (ratioHeight - x.selectedStyle.image.height) / 2;
                                 x.doc.save();
