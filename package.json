@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npm run clean && webpack --progress",
+    "build:prod" : "npm run clean && webpack -p --progress",
     "clean": "rimraf public",
     "publish" : "git subtree push --prefix public origin gh-pages",
     "test": "mocha -w test/helpers/browser.js \"src/**/*.test.js\" --require ignore-styles",
