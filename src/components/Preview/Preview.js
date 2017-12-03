@@ -20,11 +20,11 @@ export default class Preview extends Component{
     const { selectedStyle, selectedMonth, fetchedData, imgBlob } = this.props;        
     
     const data = {
-        selectedStyle,
-        selectedMonth,
-        fetchedData,
-        imgBlob
-    }
+      selectedStyle,
+      selectedMonth,
+      fetchedData,
+      imgBlob
+    };
 
     const refactorData = x => {
       const keysToConvert = ['size'];
@@ -35,7 +35,7 @@ export default class Preview extends Component{
     const addContext = x => {            
       const c = this.c;
       const ctx = c.getContext("2d");
-      return {...x, ctx, width : this.c.width, height : this.c.height }
+      return {...x, ctx, width : this.c.width, height : this.c.height };
     };
 
     const resetContext = x => {
@@ -43,7 +43,7 @@ export default class Preview extends Component{
       x.ctx.fillStyle = "#FFFFFF";
       x.ctx.fillRect(0, 0, x.width, x.height);
       return x;
-    }
+    };
 
     const drawHeaderImage = x => {
       return new Promise((resolve, reject) => {
@@ -52,16 +52,16 @@ export default class Preview extends Component{
         const callback = () => {
           x.ctx.restore();
           resolve(x);
-        }
+        };
         drawImage(x.ctx, x.imgBlob, image.x, image.y, image.width, image.height, image.radius, callback);
       });
-    }
+    };
 
     const drawMonth = x => {
       const { title } = x.selectedStyle;
       drawText(x.ctx, x.selectedMonth.string, title.x, title.y, title.width, title.size, title.color, title.font, title.style, title.align);
       return x;
-    }
+    };
 
     const drawDays = x => {
       const daysName = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
@@ -70,7 +70,7 @@ export default class Preview extends Component{
       for(let i = 0; i < daysName.length; i++){
           drawText(x.ctx, daysName[i], posX, days.y, days.width, days.size, days.color, days.font, days.style, days.align);
           posX += days.offsetX;
-      }
+      };
       return x;
     };
 
@@ -97,10 +97,10 @@ export default class Preview extends Component{
             drawText(x.ctx, drawed, dateX, dateY, dates.width, dates.size, dates.color, dates.font, dates.style, dates.align);
             drawed++;            
           } else if(i < x.selectedMonth.firstDay){
-            drawText(x.ctx, firstPreviousDays, dateX, dateY, dates.width, dates.size, dates.color, dates.font, dates.style, dates.align);
+            drawText(x.ctx, firstPreviousDays, dateX, dateY, dates.width, dates.size, dates.clearColor, dates.font, dates.style, dates.align);
             firstPreviousDays++;
           } else if(drawed > x.selectedMonth.nbrOfDays){
-            drawText(x.ctx, nextDays, dateX, dateY, dates.width, dates.size, dates.color, dates.font, dates.style, dates.align);
+            drawText(x.ctx, nextDays, dateX, dateY, dates.width, dates.size, dates.clearColor, dates.font, dates.style, dates.align);
             nextDays++;
           };
 
@@ -122,7 +122,7 @@ export default class Preview extends Component{
     const sync = pipe(refactorData, addContext, resetContext);
     const async = asyncPipe(drawHeaderImage, drawMonth, drawDays, drawEventsBoxes);
     pipe(sync, async)(data);
-  }
+  };
 
   render(){
 
