@@ -53,6 +53,7 @@ export default class Preview extends Component{
           x.ctx.restore();
           resolve(x);
         };
+        debugger
         drawImage(x.ctx, x.imgBlob, image.x, image.y, image.width, image.height, image.radius, callback);
       });
     };
