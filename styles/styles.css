@@ -1,3 +1,13 @@
+.SlideRight-appear {
+  -webkit-transform: translateX(-100%);
+          transform: translateX(-100%);
+}
+.SlideRight-appear.SlideRight-appear-active {
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
+  -webkit-transition: 0.25s ease-out;
+  transition: 0.25s ease-out;
+}
 @import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css);@import url(https://fonts.googleapis.com/css?family=Roboto+Slab);@import url(https://fonts.googleapis.com/css?family=Lato);@font-face {
   font-family: 'Lato';
   font-style: normal;
@@ -218,16 +228,6 @@ h2 {
 }
 .margin-lg-top {
   margin-top: 25px;
-}
-.SlideRight-appear {
-  -webkit-transform: translateX(-100%);
-          transform: translateX(-100%);
-}
-.SlideRight-appear.SlideRight-appear-active {
-  -webkit-transform: translateX(0);
-          transform: translateX(0);
-  -webkit-transition: 0.25s ease-out;
-  transition: 0.25s ease-out;
 }
 .SlideUp-appear {
   -webkit-transform: translateY(100vh);

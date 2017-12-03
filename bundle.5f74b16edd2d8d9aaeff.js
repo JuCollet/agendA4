@@ -14317,7 +14317,6 @@ var Preview = function (_Component) {
             x.ctx.restore();
             resolve(x);
           };
-          debugger;
           (0, _Preview.drawImage)(x.ctx, x.imgBlob, image.x, image.y, image.width, image.height, image.radius, callback);
         });
       };
@@ -20202,22 +20201,17 @@ function drawRect(ctx, posX, posY) {
 }
 
 function drawImage(ctx, imgBlob, x, y, width, height, radius, callback) {
-    var _this = this;
 
-    if (imgBlob && imgBlob.url) {
-        var img = new Image();
-        img.onload = function () {
-            var sh = _this.width / width * height;
-            var imgOffsetY = (_this.height - sh) / 2; // Center image in view zone
-            ctx.drawImage(img, 0, imgOffsetY, _this.width, sh, x, y, width, height);
-            if (radius === null || radius > 0) drawRect(ctx, x, y, undefined, radius, width, height, true);
-            callback();
-        };
-        img.src = imgBlob.url;
-    } else {
-        if (radius === null || radius > 0) drawRect(ctx, x, y, undefined, radius, width, height, true);
+    if (radius === null || radius > 0) drawRect(ctx, x, y, undefined, radius, width, height, true);
+    if (!imgBlob || !imgBlob.url) return callback();
+    var img = new Image();
+    img.onload = function () {
+        var sh = this.width / width * height;
+        var imgOffsetY = (this.height - sh) / 2; // Center image in view zone
+        ctx.drawImage(img, 0, imgOffsetY, this.width, sh, x, y, width, height);
         callback();
-    }
+    };
+    img.src = imgBlob.url;
 }
 
 function drawText(ctx, text, x, y, width, size, color, font, style, align) {
