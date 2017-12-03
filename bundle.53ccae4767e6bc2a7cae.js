@@ -14336,7 +14336,7 @@ var Preview = function (_Component) {
         for (var i = 0; i < daysName.length; i++) {
           (0, _Preview.drawText)(x.ctx, daysName[i], posX, days.y, days.width, days.size, days.color, days.font, days.style, days.align);
           posX += days.offsetX;
-        }
+        };
         return x;
       };
 
@@ -14371,10 +14371,10 @@ var Preview = function (_Component) {
             (0, _Preview.drawText)(x.ctx, drawed, dateX, dateY, dates.width, dates.size, dates.color, dates.font, dates.style, dates.align);
             drawed++;
           } else if (i < x.selectedMonth.firstDay) {
-            (0, _Preview.drawText)(x.ctx, firstPreviousDays, dateX, dateY, dates.width, dates.size, dates.color, dates.font, dates.style, dates.align);
+            (0, _Preview.drawText)(x.ctx, firstPreviousDays, dateX, dateY, dates.width, dates.size, dates.clearColor, dates.font, dates.style, dates.align);
             firstPreviousDays++;
           } else if (drawed > x.selectedMonth.nbrOfDays) {
-            (0, _Preview.drawText)(x.ctx, nextDays, dateX, dateY, dates.width, dates.size, dates.color, dates.font, dates.style, dates.align);
+            (0, _Preview.drawText)(x.ctx, nextDays, dateX, dateY, dates.width, dates.size, dates.clearColor, dates.font, dates.style, dates.align);
             nextDays++;
           };
 
