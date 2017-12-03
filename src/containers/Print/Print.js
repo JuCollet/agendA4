@@ -35,7 +35,7 @@ export default class Print extends Component {
                     .fold(i => i / 100)
             return {
                 ...x,
-                selectedStyle : objectMap(selectedStyle, keysToConvert, convertToA4)
+                selectedStyle : objectMap(x.selectedStyle, keysToConvert, convertToA4)
             }
         };
 

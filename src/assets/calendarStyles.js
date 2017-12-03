@@ -52,6 +52,7 @@ export default [
                     color : "#FFFFFF",
                     style : "",
                     align : "center",
+                    valign : "middle",
                     maxChar : 15,
                     offsetY : 2
                 }
@@ -138,6 +139,7 @@ export default [
                 color : "#FFFFFF",
                 style : "bold",
                 align : "center",
+                valign : "middle",                
                 maxChar : 15,
                 offsetY : 0
             }
