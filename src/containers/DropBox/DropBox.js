@@ -31,6 +31,8 @@ export default class DropBox extends Component {
     onDrop(e){
         e.preventDefault();
         const dt = e.dataTransfer;
+        e.currentTarget.classList.remove("dragzone-hover");        
+        if(dt.files[0].type !== "image/jpeg" && dt.files[0].type !== "image/png") return;
         const url = URL && URL.createObjectURL ? URL.createObjectURL(dt.files[0]) : null;
         this.props.updateImgBlob({url});
         e.currentTarget.classList.remove("dragzone-hover");        
