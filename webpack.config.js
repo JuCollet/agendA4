@@ -4,7 +4,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const htmlWebpackPlugin = require("html-webpack-plugin");
 const htmlWebpackHardDiskPlugin = require("html-webpack-harddisk-plugin");
 
-module.exports = {
+const config = {
     entry : {
         bundle : './src/index.js',
         vendor : ['react', 'lodash']
@@ -72,9 +72,17 @@ module.exports = {
                 css : ['styles/styles.css', ]
             }
         }),
-        new htmlWebpackHardDiskPlugin(),
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV' : JSON.stringify(process.env.NODE_ENV)
-        })
+        new htmlWebpackHardDiskPlugin()
     ]
 };
+
+if (process.env.NODE_ENV === 'production') {  
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify('production')
+      }),
+      new webpack.optimize.UglifyJsPlugin()
+    );
+  }
+
+module.exports = config;
