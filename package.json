@@ -4,7 +4,7 @@
   "description": "Print your Google Agenda with style.",
   "main": "index.js",
   "scripts": {
-    "build": "npm run clean && webpack -p --progress",
+    "build": "npm run clean && set NODE_ENV=production && webpack -p --progress",
     "build:prod" : "npm run clean && webpack -p --progress",
     "clean": "rimraf public",
     "publish" : "git subtree push --prefix public origin gh-pages",
