@@ -1,4 +1,4 @@
-// Based on Hackages HackJam course. ^^
+// FP concepts learned thanks to an Hackages HackJam Meetup.
 
 const asyncPipe = (...fn) => fn.reduce((f,g) => x => f(x).then(x => g(x)));
 

@@ -101,7 +101,7 @@ export default class Print extends Component {
         const drawMonth = x => {
             this.drawText(x.doc, x.selectedMonth.string, x.selectedStyle.title.x, x.selectedStyle.title.y, x.selectedStyle.title.width, x.selectedStyle.title.size, x.selectedStyle.title.color, x.selectedStyle.title.font, x.selectedStyle.title.style, x.selectedStyle.title.align);            
             return x;
-        }
+        };
 
         const drawDays = x => {
             const daysName = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
@@ -111,7 +111,7 @@ export default class Print extends Component {
                 posX += x.selectedStyle.days.offsetX;
             }
             return x;
-        }
+        };
 
         const drawEventsBoxes = x => {
             const nbrOfRows = Math.ceil((x.selectedMonth.firstDay + x.selectedMonth.nbrOfDays)/7);
