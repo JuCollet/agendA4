@@ -14,9 +14,12 @@ function setup(customProps){
         ...customProps
     });
 
-    const wrapper = shallow(<Preview {...props}/>);
+    const mockUpdate = sinon.spy(Preview.prototype, 'componentDidUpdate');
+
+    const wrapper = mount(<Preview {...props}/>);
 
     return {
+        mockUpdate,
         wrapper
     }
 
@@ -24,9 +27,10 @@ function setup(customProps){
 
 describe('<Preview />', function(){
 
-    it('exists', function(){
-        const { wrapper } = setup();
-        expect(wrapper).to.exist;
+    it('redraw when receive new props', function(){
+        const { mockUpdate, wrapper } = setup();
+        wrapper.setProps({test:true});
+        expect(mockUpdate.calledOnce).to.equal(true);
     });
 
 });

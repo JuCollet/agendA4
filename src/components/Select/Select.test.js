@@ -12,12 +12,12 @@ function setup(customProps){
     ...customProps
   });
   
-  const mockOnChange = sinon.spy();
+  const mockOnClick = sinon.spy();
 
-  const wrapper = shallow(<Select {...props} selectOnChangeHandler={mockOnChange} />);
+  const wrapper = shallow(<Select {...props} updateSelectedMonth={mockOnClick} />);
 
   return {
-    mockOnChange,
+    mockOnClick,
     props,
     wrapper,
     option : wrapper.find('option')
@@ -27,6 +27,21 @@ function setup(customProps){
 
 describe('<Select/>', function(){
   
-
+  it('should contain the same amount of LI than received options in props', function(){
+    const { wrapper } = setup({options : [{string:"ok"}, {string:"ok"}]});
+    expect(wrapper.find('li')).to.have.length(2);
+  });
   
+  it('should handle clicks', function(){
+    const { mockOnClick, wrapper } = setup({options : [{string:"ok"}, {string:"ok"}], test:true});
+    wrapper.find('ul').simulate('click', {target : { innerText : "coucou" }});
+    expect(mockOnClick.calledOnce).to.equal(true);
+  });
+
+  it('should return the selected value', function(){
+    const { mockOnClick, wrapper } = setup({options : [{string:"ok"}, {string:"coucou"}]});
+    wrapper.find('ul').simulate('click', { target : { innerText : "coucou" }} );
+    expect(mockOnClick.calledWith({string:'coucou'})).to.equal(true);
+  });
+
 });

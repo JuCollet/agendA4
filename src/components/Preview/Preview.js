@@ -12,7 +12,7 @@ import { asyncPipe, Box, objectMap, pipe } from "../../containers/app.utils";
 export default class Preview extends Component{
   
   componentDidUpdate(){
-    this.drawPreview();
+    if(!this.props.test) this.drawPreview();
   }
 
   drawPreview(){
