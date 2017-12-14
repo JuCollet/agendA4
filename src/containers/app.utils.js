@@ -7,6 +7,22 @@ const Box = x => ({
     fold : f => f(x)
 });
 
+const fetch = (url, cb) => {
+    try {
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", url);
+        xhr.responseType = "blob";
+        xhr.onload = function(){
+        if(xhr.status === 200){
+            cb({url : URL.createObjectURL(xhr.response)});
+        }
+        }
+        xhr.send();
+    } catch(err) {
+        console.log(err);
+    }
+};
+
 const objectMap = (obj, filter, fn) => {
     let newObject = {};
     for(let key in obj){
@@ -28,6 +44,7 @@ const pipe = (...fn) => fn.reduce((f,g) => x => g(f(x)));
 export {
     asyncPipe, 
     Box, 
+    fetch,
     objectMap, 
     pipe
 }

@@ -45,7 +45,7 @@ const config = {
                 use : [
                     {
                         loader : "url-loader",
-                        options : { limit : 2000000, name : "./img/[hash].[ext]"}
+                        options : { limit : 200000, name : "./img/[hash].[ext]"}
                     },
                     "image-webpack-loader"
                 ]

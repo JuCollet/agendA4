@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { Month } from "./Control.utils";
+import { Month, fetch } from "./Control.utils";
 import logo from "../../assets/img/logo.svg";
 
 import DropBox from "../DropBox/DropBox";
@@ -29,7 +29,7 @@ export default class Control extends Component {
     renderCalendarSwitches(){        
         return this.props.calendarList.map(el => {
             return <Switch key={el.id} title={el.summary} id={el.id} switchHandler={this.switchHandler} />
-        })
+        });
     }
 
     switchHandler(selected){
