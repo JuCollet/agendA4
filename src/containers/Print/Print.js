@@ -4,17 +4,27 @@ import PDFDocument from "./pdfkit";
 import downloadjs from "downloadjs";
 import blobStream from "blob-stream";
 
+import "./Print.style.less";
+
 import { asyncPipe, Box, objectMap, pipe } from "../app.utils";
 
 export default class Print extends Component {
 
     constructor(props){
         super(props);
+        this.state = {
+            isBuildingPdf : false
+        };
         this.buildCalendar = this.buildCalendar.bind(this);
         this.drawText = this.drawText.bind(this);
     }
     
     buildCalendar(){
+        if(this.state.isBuildingPdf === true){
+            return ;
+        } else {
+            this.setState({isBuildingPdf : true});            
+        };
 
         const { selectedStyle, selectedMonth, fetchedData, imgBlob } = this.props;        
         
@@ -166,6 +176,7 @@ export default class Print extends Component {
             x.stream.on('finish', () => {
                 const blob = x.stream.toBlob('application/pdf');
                 downloadjs(blob, "Mon calendrier", "application/pdf");
+                this.setState({isBuildingPdf:false});
             });
         };
 
@@ -183,7 +194,9 @@ export default class Print extends Component {
     
     render(){
         return (
-            <div className="preview-btn" onClick={() => this.buildCalendar()}>Télécharger</div>
+            <div className="preview-btn" onClick={() => this.buildCalendar()}>
+                {this.state.isBuildingPdf ? <span className="loading-bars">En construction...</span> : "Télécharger"}
+            </div>
         );
     };
 };
