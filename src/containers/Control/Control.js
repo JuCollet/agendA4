@@ -29,7 +29,7 @@ export default class Control extends Component {
         this.props.updateSelectedMonth(Month.getCurrentMonth());
         setTimeout(() => {
             fetch(defaultImg, this.props.updateImgBlob);
-        }, 250);
+        }, 1000);
     }
 
     renderCalendarSwitches(){        
