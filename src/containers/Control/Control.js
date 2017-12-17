@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { Month, fetch } from "./Control.utils";
+import { Month } from "./Control.utils";
+import { fetch } from "../app.utils";
 import logo from "../../assets/img/logo.svg";
+import defaultImg from "../../assets/img/default.jpg";
 
 import DropBox from "../DropBox/DropBox";
 import Select from "../../components/Select/Select";
@@ -10,6 +12,7 @@ import Styles from "../../components/Styles/Styles";
 import Switch from "../../components/Switch/Switch";
 
 import "./Control.anim.less";
+import { setTimeout } from "timers";
 
 export default class Control extends Component {
 
@@ -24,6 +27,9 @@ export default class Control extends Component {
 
     componentDidMount(){
         this.props.updateSelectedMonth(Month.getCurrentMonth());
+        setTimeout(() => {
+            fetch(defaultImg, this.props.updateImgBlob);
+        }, 250);
     }
 
     renderCalendarSwitches(){        

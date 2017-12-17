@@ -2,13 +2,11 @@ import React, { Component } from "react";
 
 import "../assets/styles/styles.less";
 import stylesList from "../assets/calendarStyles";
-import defaultImg from "../assets/img/default.jpg";
 
 import Control from "./Control/Control";
 import Preview from "../components/Preview/Preview";
 import Landing from "../components/Landing/Landing";
 
-import { fetch } from "./app.utils";
 import { googleApi as gapi } from "./app.services.js"
 
 export default class App extends Component {
@@ -38,7 +36,6 @@ export default class App extends Component {
         gapi.init(isSignedIn => {
             this.setState({isSignedIn}, this.updateCalendarList);
         });
-        fetch(defaultImg, this.updateImgBlob);        
     }
 
     resetState(){
