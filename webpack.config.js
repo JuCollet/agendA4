@@ -10,7 +10,7 @@ const config = {
         vendor : ['react', 'lodash']
     },
     output : {
-        filename : '[name].[chunkhash].js',
+        filename : '[name].[hash].js',
         path : path.resolve(__dirname, "public")
     },
     devServer: {

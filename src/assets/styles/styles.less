@@ -103,10 +103,38 @@ h2 {
 
 .landing {
   display: flex;
+  position: relative;
+  overflow: hidden;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;
+
+  .landingBack {
+    position: absolute;
+    width: 800px;
+  }
+
+  .landingBack-left {
+    animation: landingBack-left-anim 1s 1;
+    animation-fill-mode: forwards;    
+  }
+  
+  @keyframes landingBack-left-anim {
+    from {transform: translate(-450px, 280px); opacity: .1;}
+    to {transform: translate(-450px, 300px); opacity: 1;}
+  }
+
+  .landingBack-right {
+    animation: landingBack-right-anim 1s 1;
+    animation-fill-mode: forwards;   
+  }
+
+  @keyframes landingBack-right-anim {
+    from {transform: translate(500px, -410px); opacity: .1;}
+    to {transform: translate(500px, -400px); opacity: 1;}
+  }
+
 }
 
 .link-underline {
