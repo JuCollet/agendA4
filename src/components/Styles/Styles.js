@@ -19,7 +19,7 @@ export default props => {
                 return (
                     <li key={index} data-index={index} onClick={e => clickHandler(e)}>
                         <div className={index === 0 ? "styles-item active" : "styles-item"}>
-                            <img height="90" width="70"/>
+                            <img src={el.preview} height="90" width="65"/>
                             <span className="styles-label">Style {index+1}</span>
                         </div>
                     </li>

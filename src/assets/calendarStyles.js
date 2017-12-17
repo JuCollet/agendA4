@@ -2,6 +2,9 @@ import LatoBold from "./fonts/Lato-Bold.ttf";
 import LatoRegular from "./fonts/Lato-Regular.ttf";
 import LatoLight from "./fonts/Lato-Light.ttf";
 
+import Style01 from "./img/Style01.png";
+import Style02 from "./img/Style02.png";
+
 export default [
     {   fonts : [
         {
@@ -15,6 +18,7 @@ export default [
             file : LatoRegular
         }
     ],
+    preview: Style01,
     days : {
         font : "Lato",
         style : "",
@@ -102,6 +106,7 @@ export default [
         file : LatoRegular
     }
 ],
+preview: Style02,
 days : {
     font : "Lato",
     style : "",
