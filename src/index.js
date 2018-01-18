@@ -6,6 +6,7 @@ import App from "./containers/app";
 const root = document.getElementById('root');
 
 window.onload = () => {
-    document.querySelector('.loading-wrapper').remove();
+    const loading_wrapper = document.querySelector('.loading-wrapper');
+    loading_wrapper.parentElement.removeChild(loading_wrapper);
     ReactDOM.render(<App/>, root);
 };

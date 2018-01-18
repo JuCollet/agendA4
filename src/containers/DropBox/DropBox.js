@@ -13,9 +13,7 @@ export default class DropBox extends Component {
             e.target.files[0] &&
            (e.target.files[0].type === "image/jpeg" || e.target.files[0].type === "image/png")){
             const url = URL && URL.createObjectURL ? URL.createObjectURL(e.target.files[0]) : null;
-            this.props.updateImgBlob({
-                url : url
-            });
+            this.props.updateImgBlob({url});
         }
     }
 
