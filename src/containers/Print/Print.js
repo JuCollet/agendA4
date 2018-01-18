@@ -175,7 +175,7 @@ export default class Print extends Component {
             x.doc.end();
             x.stream.on('finish', () => {
                 const blob = x.stream.toBlob('application/pdf');
-                downloadjs(blob, "Mon calendrier", "application/pdf");
+                downloadjs(blob, "Mon calendrier.pdf", "application/pdf");
                 this.setState({isBuildingPdf:false});
             });
         };
