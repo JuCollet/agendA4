@@ -3,6 +3,7 @@ const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const htmlWebpackPlugin = require("html-webpack-plugin");
 const htmlWebpackHardDiskPlugin = require("html-webpack-harddisk-plugin");
+const CriticalPlugin = require('webpack-plugin-critical').CriticalPlugin;
 
 const config = {
     entry : {
@@ -72,7 +73,13 @@ const config = {
                 css : ['styles/styles.css', ]
             }
         }),
-        new htmlWebpackHardDiskPlugin()
+        new htmlWebpackHardDiskPlugin(),
+        new CriticalPlugin({
+            src: 'index.html',
+            inline: true,
+            minify: true,
+            dest: 'index.html'
+          })
     ]
 };
 

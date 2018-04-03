@@ -1,13 +1,13 @@
 {
   "name": "agenda4",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Print your Google Agenda with style.",
   "main": "index.js",
   "scripts": {
     "build": "npm run clean && set NODE_ENV=production && webpack -p --progress",
-    "build:prod" : "npm run clean && webpack -p --progress",
+    "build:prod": "npm run clean && webpack -p --progress",
     "clean": "rimraf public",
-    "publish" : "git subtree push --prefix public origin gh-pages",
+    "publish": "git subtree push --prefix public origin gh-pages",
     "test": "mocha -w test/helpers/browser.js \"src/**/*.test.js\" --require ignore-styles",
     "dev:hot": "webpack-dev-server --hot --inline --progress --colors --watch --content-base public/"
   },
@@ -66,6 +66,7 @@
     "sinon": "^4.0.2",
     "style-loader": "^0.19.0",
     "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.4"
+    "webpack-dev-server": "^2.9.4",
+    "webpack-plugin-critical": "^1.0.0"
   }
 }
